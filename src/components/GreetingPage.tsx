@@ -284,20 +284,6 @@ function StandardGreeting({ receiverName, senderName, message, theme }: Greeting
                 <span className="text-sm">{viewCount} people viewed this Eid wish</span>
               </motion.div>
 
-              {/* Share buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.3 }}
-              >
-                <ShareButtons
-                  receiverName={receiverName}
-                  senderName={senderName}
-                  message={message}
-                  theme={theme}
-                />
-              </motion.div>
-
               {/* Theme badge */}
               <motion.div
                 className="mt-8"
@@ -308,23 +294,6 @@ function StandardGreeting({ receiverName, senderName, message, theme }: Greeting
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/50 text-sm">
                   {themeConfig.emoji} {themeConfig.name} Theme
                 </span>
-              </motion.div>
-
-              {/* Create your own wish */}
-              <motion.div
-                className="mt-12"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.7 }}
-              >
-                <Link href="/">
-                  <Button
-                    variant="outline"
-                    className="bg-white/10 border-white/20 text-white hover:bg-white/20 px-6 py-3"
-                  >
-                    ✨ Create Your Own Eid Wish
-                  </Button>
-                </Link>
               </motion.div>
             </motion.div>
           </motion.div>

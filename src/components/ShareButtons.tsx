@@ -108,7 +108,7 @@ export default function ShareButtons({
       </div>
 
       {/* Social buttons */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         {shareButtons.map((btn, index) => (
           <motion.div
             key={btn.name}
@@ -117,13 +117,14 @@ export default function ShareButtons({
             transition={{ delay: index * 0.1 }}
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
+            className="w-full h-full"
           >
             <Button
               onClick={btn.handler}
-              className={`w-full py-5 rounded-xl font-medium transition-all duration-300 ${btn.className}`}
+              className={`w-full h-full min-h-[68px] sm:min-h-[52px] py-2 sm:py-5 px-1 sm:px-4 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 rounded-xl font-medium transition-all duration-300 ${btn.className}`}
             >
-              <span className="mr-2">{btn.icon}</span>
-              {btn.name}
+              <div className="flex items-center justify-center -mb-0.5 sm:mb-0 scale-[1.15] sm:scale-100">{btn.icon}</div>
+              <span className="text-[11px] sm:text-sm leading-tight tracking-tight whitespace-nowrap">{btn.name}</span>
             </Button>
           </motion.div>
         ))}

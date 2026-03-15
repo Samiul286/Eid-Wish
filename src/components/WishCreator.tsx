@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { themes, ThemeId, DEFAULT_MESSAGE, generateShareUrl } from '@/types/wish';
-import { Sparkles, Eye, Check, Share2, User, Heart, MessageSquare, Palette, Copy, CheckCheck, Crown } from 'lucide-react';
+import { Sparkles, Eye, Check, Share2, User, Heart, MessageSquare, Palette, Copy, CheckCheck, Crown, Send, Gift, PartyPopper } from 'lucide-react';
 import PreviewModal from './PreviewModal';
 import ShareButtons from './ShareButtons';
 import { toast } from 'sonner';
@@ -44,12 +44,8 @@ export default function WishCreator() {
     try {
       await navigator.clipboard.writeText(generatedUrl);
       setCopied(true);
-      toast.success('Link copied! Share it with your loved ones 🌙', {
-        style: {
-          background: 'linear-gradient(135deg, #1a1428 0%, #0d1b2a 100%)',
-          color: '#ffd700',
-          border: '1px solid #d4af37',
-        },
+      toast.success('Magic link copied! Ready to share ✨', {
+        className: 'bg-black/80 backdrop-blur-xl border-amber-500/30 text-amber-300 font-medium rounded-2xl',
       });
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -64,99 +60,114 @@ export default function WishCreator() {
     }
   };
 
+  const containerVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      transition: { 
+        type: 'spring', 
+        damping: 25, 
+        stiffness: 100,
+        staggerChildren: 0.1,
+        delayChildren: 0.1 
+      }
+    }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', damping: 20, stiffness: 100 } }
+  };
+
   // Success state
   if (generatedUrl) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="w-full max-w-lg mx-auto relative z-10"
       >
-        <div className="relative rounded-3xl overflow-hidden">
-          {/* Ornate border */}
-          <div
-            className="absolute inset-0 rounded-3xl pointer-events-none"
-            style={{
-              border: '2px solid transparent',
-              background: 'linear-gradient(#0d1b2a, #0d1b2a) padding-box, linear-gradient(135deg, #b8860b, #ffd700, #b8860b) border-box',
-              WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
-              WebkitMaskComposite: 'xor',
-              maskComposite: 'exclude',
-            }}
-          />
+        <div className="relative rounded-[2.5rem] bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_80px_-20px_rgba(255,215,0,0.15)] overflow-hidden">
+          
+          {/* Animated Glow Background */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/20 rounded-full blur-[80px] mix-blend-screen pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 rounded-full blur-[80px] mix-blend-screen pointer-events-none" />
 
-          <div className="relative p-8 md:p-10">
-            {/* Success header */}
-            <div className="text-center mb-8">
+          <div className="relative p-6 sm:p-10 flex flex-col items-center">
+            
+            <motion.div variants={itemVariants} className="relative mb-6">
               <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', duration: 0.6 }}
-                className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6"
-                style={{
-                  background: 'linear-gradient(135deg, #b8860b, #ffd700, #daa520)',
-                  boxShadow: '0 10px 40px -10px rgba(255, 215, 0, 0.3)',
+                animate={{ 
+                  boxShadow: ['0 0 20px rgba(255, 215, 0, 0.2)', '0 0 40px rgba(255, 215, 0, 0.5)', '0 0 20px rgba(255, 215, 0, 0.2)']
                 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-300 via-amber-500 to-yellow-600 flex items-center justify-center relative z-10 shadow-xl"
               >
-                <Crown className="w-10 h-10 text-black" />
+                <PartyPopper className="w-12 h-12 text-black/90" />
               </motion.div>
+              {/* Confetti particles effect ring */}
+              <div className="absolute inset-0 rounded-full border border-amber-400/30 animate-ping opacity-50 duration-1000" />
+            </motion.div>
 
-              <h2
-                className="text-2xl md:text-3xl font-bold mb-3"
-                style={{
-                  fontFamily: 'var(--font-playfair), Georgia, serif',
-                  background: 'linear-gradient(135deg, #ffd700, #daa520)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                Your Wish is Ready!
+            <motion.div variants={itemVariants} className="text-center mb-8">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-100 to-amber-300 drop-shadow-sm font-serif">
+                It's Ready!
               </h2>
-              <p className="text-white/50">
-                Share this link with <span className="text-amber-400">{receiverName}</span>
+              <p className="text-white/60 text-sm sm:text-base font-medium">
+                Your beautiful wish for <span className="text-amber-400 font-semibold">{receiverName}</span> is complete.
               </p>
-            </div>
+            </motion.div>
 
-            {/* URL Display */}
-            <div className="mb-8">
-              <div className="relative rounded-2xl overflow-hidden bg-white/5 border border-white/10">
-                <div className="p-4">
-                  <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Shareable Link</p>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-black/30 rounded-xl px-4 py-3 overflow-hidden">
-                      <p className="text-white/80 text-sm truncate font-mono">{generatedUrl}</p>
-                    </div>
-                    <Button
-                      onClick={handleCopyLink}
-                      className={`shrink-0 px-5 py-3 rounded-xl font-medium transition-all ${
-                        copied
-                          ? 'bg-emerald-500 hover:bg-emerald-500 text-white'
-                          : 'bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black'
-                      }`}
-                    >
+            <motion.div variants={itemVariants} className="w-full mb-8">
+              <div className="group relative rounded-2xl bg-white/5 border border-white/10 p-1.5 transition-all hover:bg-white/10">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center gap-2">
+                  <div className="flex-1 bg-black/40 rounded-xl px-4 py-3 sm:py-4 overflow-hidden shadow-inner">
+                    <p className="text-white/70 text-sm truncate font-mono tracking-tight">{generatedUrl}</p>
+                  </div>
+                  <Button
+                    onClick={handleCopyLink}
+                    className={`shrink-0 overflow-hidden relative h-full min-h-[48px] px-5 sm:px-6 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
+                      copied
+                        ? 'bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/25'
+                        : 'bg-white text-black hover:bg-amber-100 shadow-white/10'
+                    }`}
+                  >
+                    <AnimatePresence mode="wait">
                       {copied ? (
                         <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
+                          key="copied"
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          exit={{ y: -20, opacity: 0 }}
                           className="flex items-center gap-2"
                         >
-                          <Check className="w-4 h-4" />
-                          Copied!
+                          <CheckCheck className="w-5 h-5" />
+                          <span>Copied</span>
                         </motion.div>
                       ) : (
-                        <div className="flex items-center gap-2">
-                          <Copy className="w-4 h-4" />
-                          Copy
-                        </div>
+                        <motion.div
+                          key="copy"
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          exit={{ y: -20, opacity: 0 }}
+                          className="flex items-center gap-2"
+                        >
+                          <Copy className="w-5 h-5" />
+                          <span>Copy Link</span>
+                        </motion.div>
                       )}
-                    </Button>
-                  </div>
+                    </AnimatePresence>
+                  </Button>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Share buttons */}
-            <div className="mb-6">
+            <motion.div variants={itemVariants} className="w-full mb-8">
+              {/* Clean up duplicate heading */}
               <ShareButtons
                 receiverName={receiverName}
                 senderName={senderName}
@@ -164,22 +175,23 @@ export default function WishCreator() {
                 theme={selectedTheme}
                 url={generatedUrl}
               />
-            </div>
+            </motion.div>
 
-            {/* Create another */}
-            <Button
-              onClick={() => {
-                setGeneratedUrl(null);
-                setSenderName('');
-                setReceiverName('');
-                setMessage('');
-              }}
-              variant="outline"
-              className="w-full py-5 border-amber-400/30 bg-transparent text-amber-400 hover:bg-amber-400/10 rounded-2xl"
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Create Another Wish
-            </Button>
+            <motion.div variants={itemVariants} className="w-full">
+              <Button
+                onClick={() => {
+                  setGeneratedUrl(null);
+                  setSenderName('');
+                  setReceiverName('');
+                  setMessage('');
+                }}
+                variant="ghost"
+                className="w-full py-6 font-semibold text-white/50 hover:text-amber-400 hover:bg-amber-400/10 rounded-2xl transition-all border border-transparent hover:border-amber-400/20 group"
+              >
+                <Gift className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                Create Another Wish
+              </Button>
+            </motion.div>
           </div>
         </div>
       </motion.div>
@@ -190,217 +202,167 @@ export default function WishCreator() {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="w-full max-w-xl mx-auto relative z-10"
       >
-        <div className="relative rounded-3xl overflow-hidden">
-          {/* Ornate border */}
-          <div
-            className="absolute inset-0 rounded-3xl pointer-events-none"
-            style={{
-              border: '2px solid transparent',
-              background: 'linear-gradient(#0d1b2a, #0d1b2a) padding-box, linear-gradient(135deg, #b8860b, #ffd700, #b8860b) border-box',
-              WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
-              WebkitMaskComposite: 'xor',
-              maskComposite: 'exclude',
-            }}
-          />
-
-          {/* Header */}
-          <div className="relative p-8 md:p-10 pb-6 text-center border-b border-amber-400/10">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', duration: 0.6 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6"
-              style={{
-                background: 'linear-gradient(135deg, #b8860b, #ffd700, #daa520)',
-                boxShadow: '0 10px 40px -10px rgba(255, 215, 0, 0.3)',
-              }}
-            >
-              <Sparkles className="w-8 h-8 text-black" />
-            </motion.div>
-
-            <h2
-              className="text-2xl md:text-3xl font-bold mb-2"
-              style={{
-                fontFamily: 'var(--font-playfair), Georgia, serif',
-                background: 'linear-gradient(135deg, #ffd700, #daa520)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Create Your Eid Wish
-            </h2>
-            <p className="text-white/40 text-sm">
-              Send heartfelt Eid greetings with beautiful themes
-            </p>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={(e) => { e.preventDefault(); handleGenerate(); }} className="p-6 md:p-8 space-y-6">
-            {/* Names */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="relative rounded-[2.5rem] bg-black/40 backdrop-blur-3xl border border-white/10 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.5)] overflow-hidden">
+          
+          {/* Animated Background Highlights */}
+          <div className="absolute -top-20 -left-20 w-80 h-80 bg-amber-500/10 rounded-full blur-[100px] mix-blend-screen pointer-events-none" />
+          <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-[100px] mix-blend-screen pointer-events-none" />
+          
+          <div className="relative p-6 sm:p-10">
+            {/* Header */}
+            <motion.div variants={itemVariants} className="text-center mb-10">
               <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
+                whileHover={{ rotate: 180, scale: 1.1 }}
+                transition={{ type: 'spring', damping: 10, stiffness: 100 }}
+                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5 bg-gradient-to-tr from-amber-400 to-yellow-200 shadow-[0_0_30px_rgba(255,215,0,0.3)] shadow-inner"
               >
-                <Label className="text-white/60 flex items-center gap-2 text-xs uppercase tracking-wider">
-                  <User className="w-3.5 h-3.5 text-amber-400" />
-                  Your Name
-                </Label>
-                <div className="relative">
-                  <Input
-                    value={senderName}
-                    onChange={(e) => setSenderName(e.target.value)}
-                    placeholder="Enter your name"
-                    required
-                    className="bg-white/5 border-amber-400/20 text-white placeholder:text-white/30 focus:border-amber-400/50 h-12 px-4 rounded-xl text-base"
-                  />
-                  {senderName && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
-                    >
-                      <Check className="w-4 h-4 text-emerald-400" />
-                    </motion.div>
-                  )}
-                </div>
+                <Sparkles className="w-8 h-8 text-black" fill="currentColor" />
               </motion.div>
-
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.15 }}
-              >
-                <Label className="text-white/60 flex items-center gap-2 text-xs uppercase tracking-wider">
-                  <Heart className="w-3.5 h-3.5 text-rose-400" />
-                  Recipient
-                </Label>
-                <div className="relative">
-                  <Input
-                    value={receiverName}
-                    onChange={(e) => setReceiverName(e.target.value)}
-                    placeholder="Who is this for?"
-                    required
-                    className="bg-white/5 border-amber-400/20 text-white placeholder:text-white/30 focus:border-amber-400/50 h-12 px-4 rounded-xl text-base"
-                  />
-                  {receiverName && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
-                    >
-                      <Check className="w-4 h-4 text-emerald-400" />
-                    </motion.div>
-                  )}
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Message */}
-            <motion.div
-              className="space-y-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Label className="text-white/60 flex items-center gap-2 text-xs uppercase tracking-wider">
-                <MessageSquare className="w-3.5 h-3.5 text-blue-400" />
-                Message <span className="text-white/20 normal-case">(optional)</span>
-              </Label>
-              <Textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder={DEFAULT_MESSAGE}
-                rows={2}
-                className="bg-white/5 border-amber-400/20 text-white placeholder:text-white/30 focus:border-amber-400/50 rounded-xl resize-none py-3 text-base"
-              />
-            </motion.div>
-
-            {/* Theme selection */}
-            <motion.div
-              className="space-y-3"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
-            >
-              <Label className="text-white/60 flex items-center gap-2 text-xs uppercase tracking-wider">
-                <Palette className="w-3.5 h-3.5 text-purple-400" />
-                Choose Theme
-              </Label>
-
-              <div className="grid grid-cols-5 gap-2">
-                {Object.values(themes).map((theme) => {
-                  const isSelected = selectedTheme === theme.id;
-                  return (
-                    <motion.button
-                      key={theme.id}
-                      type="button"
-                      onClick={() => setSelectedTheme(theme.id)}
-                      className={`relative aspect-square rounded-xl overflow-hidden transition-all ${
-                        isSelected
-                          ? 'ring-2 ring-amber-400 scale-105'
-                          : 'hover:scale-105 opacity-60 hover:opacity-100'
-                      }`}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${theme.previewGradient}`} />
-                      <div className="relative h-full flex items-center justify-center">
-                        <span className="text-2xl">{theme.emoji}</span>
-                      </div>
-                      {isSelected && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="absolute bottom-1 right-1 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center"
-                        >
-                          <Check className="w-2.5 h-2.5 text-black" />
-                        </motion.div>
-                      )}
-                    </motion.button>
-                  );
-                })}
-              </div>
-
-              <p className="text-center text-white/30 text-xs">
-                <span className="text-amber-400/60">{themes[selectedTheme].name}</span> theme selected
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3 tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white to-white/70 font-serif">
+                Craft a Memory
+              </h2>
+              <p className="text-white/50 text-sm sm:text-base">
+                Design a stunning personalized greeting for your loved ones.
               </p>
             </motion.div>
 
-            {/* Buttons */}
-            <motion.div
-              className="flex gap-3 pt-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <Button
-                type="button"
-                variant="outline"
-                disabled={!senderName.trim() || !receiverName.trim()}
-                onClick={handlePreview}
-                className="flex-1 py-5 border-amber-400/30 bg-transparent text-white/70 hover:bg-amber-400/10 hover:text-white rounded-xl"
-              >
-                <Eye className="w-4 h-4 mr-2" />
-                Preview
-              </Button>
+            {/* Form */}
+            <form onSubmit={(e) => { e.preventDefault(); handleGenerate(); }} className="space-y-6 sm:space-y-8">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+                {/* Sender Name */}
+                <motion.div variants={itemVariants} className="space-y-3">
+                  <Label className="uppercase text-[10px] sm:text-xs font-bold tracking-[0.2em] text-amber-400/80 flex items-center gap-2">
+                    <User className="w-3.5 h-3.5" />
+                    From Whom?
+                  </Label>
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-amber-400/20 rounded-xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                    <Input
+                      value={senderName}
+                      onChange={(e) => setSenderName(e.target.value)}
+                      placeholder="Your Name"
+                      required
+                      className="relative bg-white/5 border-white/10 hover:border-white/20 text-white placeholder:text-white/20 focus:border-amber-400/50 focus:bg-black/50 h-14 px-5 rounded-xl text-base sm:text-lg transition-all shadow-inner"
+                    />
+                  </div>
+                </motion.div>
 
-              <Button
-                type="submit"
-                disabled={!senderName.trim() || !receiverName.trim()}
-                className="flex-1 py-5 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black rounded-xl font-semibold"
-              >
-                <Share2 className="w-4 h-4 mr-2" />
-                Generate Link
-              </Button>
-            </motion.div>
-          </form>
+                {/* Receiver Name */}
+                <motion.div variants={itemVariants} className="space-y-3">
+                  <Label className="uppercase text-[10px] sm:text-xs font-bold tracking-[0.2em] text-purple-400/80 flex items-center gap-2">
+                    <Heart className="w-3.5 h-3.5" />
+                    For Whom?
+                  </Label>
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-purple-400/20 rounded-xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                    <Input
+                      value={receiverName}
+                      onChange={(e) => setReceiverName(e.target.value)}
+                      placeholder="Their Name"
+                      required
+                      className="relative bg-white/5 border-white/10 hover:border-white/20 text-white placeholder:text-white/20 focus:border-purple-400/50 focus:bg-black/50 h-14 px-5 rounded-xl text-base sm:text-lg transition-all shadow-inner"
+                    />
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Message */}
+              <motion.div variants={itemVariants} className="space-y-3">
+                <Label className="uppercase text-[10px] sm:text-xs font-bold tracking-[0.2em] text-blue-400/80 flex items-center justify-between">
+                  <span className="flex items-center gap-2"><MessageSquare className="w-3.5 h-3.5" /> Heartfelt Message</span>
+                  <span className="text-white/20 font-normal normal-case tracking-normal">Optional</span>
+                </Label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-blue-400/20 rounded-xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                  <Textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder={DEFAULT_MESSAGE}
+                    rows={3}
+                    className="relative bg-white/5 border-white/10 hover:border-white/20 text-white placeholder:text-white/20 focus:border-blue-400/50 focus:bg-black/50 rounded-xl resize-none py-4 px-5 text-base leading-relaxed transition-all shadow-inner"
+                  />
+                </div>
+              </motion.div>
+
+              {/* Theme Selection */}
+              <motion.div variants={itemVariants} className="space-y-4 pt-2">
+                <div className="flex items-center justify-between">
+                  <Label className="uppercase text-[10px] sm:text-xs font-bold tracking-[0.2em] text-emerald-400/80 flex items-center gap-2">
+                    <Palette className="w-3.5 h-3.5" />
+                    Select Theme
+                  </Label>
+                  <span className="text-xs font-medium text-emerald-400/60 bg-emerald-400/10 px-2.5 py-1 rounded-full">
+                    {themes[selectedTheme].name}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-5 gap-3">
+                  {Object.values(themes).map((theme) => {
+                    const isSelected = selectedTheme === theme.id;
+                    return (
+                      <motion.button
+                        key={theme.id}
+                        type="button"
+                        onClick={() => setSelectedTheme(theme.id)}
+                        className={`relative aspect-square rounded-2xl overflow-hidden transition-all duration-300 ${
+                          isSelected
+                            ? 'shadow-[0_0_20px_rgba(255,255,255,0.2)] scale-100 z-10'
+                            : 'scale-95 opacity-50 hover:opacity-100 hover:scale-100'
+                        }`}
+                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <div className={`absolute inset-0 bg-gradient-to-br ${theme.previewGradient}`} />
+                        {isSelected && (
+                          <motion.div 
+                            layoutId="theme-selection"
+                            className="absolute inset-0 border-2 border-white rounded-2xl"
+                            initial={false}
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                          />
+                        )}
+                        <div className="relative h-full flex flex-col items-center justify-center gap-1">
+                          <span className="text-2xl sm:text-3xl transform transition-transform duration-300" style={{ transform: isSelected ? 'scale(1.1)' : 'scale(1)' }}>{theme.emoji}</span>
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+
+              {/* Action Buttons */}
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-6">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  disabled={!senderName.trim() || !receiverName.trim()}
+                  onClick={handlePreview}
+                  className="sm:w-1/3 py-6 h-auto bg-white/5 hover:bg-white/10 text-white/80 hover:text-white rounded-xl border border-white/10 transition-all font-semibold"
+                >
+                  <Eye className="w-5 h-5 mr-2" />
+                  Preview
+                </Button>
+
+                <Button
+                  type="submit"
+                  disabled={!senderName.trim() || !receiverName.trim()}
+                  className="flex-1 py-6 h-auto bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-600 text-amber-950 rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(255,215,0,0.2)] hover:shadow-[0_0_40px_rgba(255,215,0,0.4)] disabled:opacity-50 disabled:shadow-none relative group overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                  <span className="relative flex items-center justify-center">
+                    <Send className="w-5 h-5 mr-2" />
+                    Generate Link
+                  </span>
+                </Button>
+              </motion.div>
+            </form>
+          </div>
         </div>
       </motion.div>
 

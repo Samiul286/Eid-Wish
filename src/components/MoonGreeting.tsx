@@ -461,41 +461,7 @@ export default function MoonGreeting({ receiverName, senderName, message }: Moon
                 </div>
               </div>
 
-              {/* Share buttons */}
-              <motion.div
-                className="mt-10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.4 }}
-              >
-                <ShareButtons
-                  receiverName={receiverName}
-                  senderName={senderName}
-                  message={message}
-                  theme="moon"
-                />
-              </motion.div>
 
-              {/* Create own wish */}
-              <motion.div
-                className="mt-8 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.6 }}
-              >
-                <Link href="/">
-                  <Button
-                    className="bg-gradient-to-r from-yellow-600 to-yellow-400 hover:from-yellow-500 hover:to-yellow-300 text-black font-semibold rounded-full px-8 py-6 shadow-lg"
-                    style={{
-                      boxShadow: '0 10px 40px -10px rgba(255, 215, 0, 0.4)',
-                    }}
-                  >
-                    <Moon className="w-5 h-5 mr-2" />
-                    Create Your Own Eid Wish
-                    <Star className="w-4 h-4 ml-2 fill-current" />
-                  </Button>
-                </Link>
-              </motion.div>
             </motion.div>
           </motion.div>
         )}

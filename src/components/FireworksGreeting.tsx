@@ -38,7 +38,6 @@ function NeonGlow({ children, color = '#ff00ff', delay = 0 }: { children: React.
   return (
     <motion.div
       className="relative inline-block"
-      className="relative inline-block"
       style={{
         textShadow: `0 0 10px ${color}, 0 0 20px ${color}`,
         willChange: 'transform, opacity'
@@ -666,58 +665,7 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
                 </div>
               </div>
 
-              {/* Share buttons */}
-              <motion.div
-                className="mt-12"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.4 }}
-              >
-                <ShareButtons
-                  receiverName={receiverName}
-                  senderName={senderName}
-                  message={message}
-                  theme="fireworks"
-                />
-              </motion.div>
 
-              {/* Create own wish */}
-              <motion.div
-                className="mt-8 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.6 }}
-              >
-                <Link href="/">
-                  <Button
-                    className="relative overflow-hidden rounded-full px-8 py-6 font-semibold text-white"
-                    style={{
-                      background: 'linear-gradient(135deg, #ff00ff, #00ffff)',
-                    }}
-                  >
-                    <motion.div
-                      className="absolute inset-0"
-                      style={{
-                        background: 'linear-gradient(135deg, #00ffff, #ff00ff, #00ffff)',
-                        backgroundSize: '200% 200%',
-                      }}
-                      animate={{
-                        backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                    />
-                    <span className="relative flex items-center">
-                      <Zap className="w-5 h-5 mr-2" />
-                      Create Your Own Celebration
-                      <Sparkles className="w-5 h-5 ml-2" />
-                    </span>
-                  </Button>
-                </Link>
-              </motion.div>
             </motion.div>
           </motion.div>
         )}

@@ -2,251 +2,273 @@
 
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Sparkles, ArrowRight, Zap, Globe, Heart } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { Sparkles, ArrowRight, Star } from 'lucide-react';
 
 interface HeroProps {
   onCreateWish?: () => void;
 }
 
-/* ────────────────── Twinkling Star ────────────────── */
-function Star({ seed }: { seed: number }) {
-  const r = (s: number) => {
-    const x = Math.sin(s * 12.9898 + s * 78.233) * 43758.5453;
-    return x - Math.floor(x);
-  };
-  const left = r(seed * 3) * 100;
-  const top = r(seed * 3 + 1) * 100;
-  const size = r(seed * 3 + 2) * 2.5 + 1;
-  const dur = r(seed * 3 + 3) * 4 + 2;
-  const del = r(seed * 3 + 4) * 4;
+/* ── Deterministic random ── */
+function sr(seed: number) {
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+}
 
+/* ── Twinkling Star ── */
+function TwinkleStar({ i }: { i: number }) {
+  const x = sr(i * 3) * 100;
+  const y = sr(i * 3 + 1) * 100;
+  const s = sr(i * 3 + 2) * 2.5 + 0.8;
+  const dur = sr(i * 3 + 3) * 4 + 3;
+  const del = sr(i * 3 + 4) * 5;
+  const gold = sr(i) > 0.6;
   return (
     <motion.div
       className="absolute rounded-full pointer-events-none"
       style={{
-        left: `${left}%`,
-        top: `${top}%`,
-        width: size,
-        height: size,
-        background: `radial-gradient(circle, rgba(${r(seed) > 0.5 ? '110,231,183' : '167,243,208'}, ${r(seed) * 0.6 + 0.3}) 0%, transparent 70%)`,
+        left: `${x}%`,
+        top: `${y}%`,
+        width: s,
+        height: s,
+        background: gold
+          ? `rgba(251, 191, 36, ${sr(i + 7) * 0.5 + 0.3})`
+          : `rgba(255, 255, 255, ${sr(i + 9) * 0.4 + 0.2})`,
+        boxShadow: gold ? `0 0 ${s * 3}px rgba(251,191,36,0.6)` : 'none',
         willChange: 'transform, opacity',
       }}
-      animate={{ opacity: [0.1, 1, 0.1], scale: [0.7, 1.4, 0.7] }}
+      animate={{ opacity: [0.1, 1, 0.1], scale: [0.6, 1.4, 0.6] }}
       transition={{ duration: dur, delay: del, repeat: Infinity, ease: 'easeInOut' }}
     />
   );
 }
 
-/* ────────────────── Floating Orb ────────────────── */
-function FloatingOrb({ color, size, x, y, delay }: { color: string; size: number; x: string; y: string; delay: number }) {
+/* ── Floating Lantern ── */
+function Lantern({ i }: { i: number }) {
+  const x = sr(i * 7) * 80 + 10;
+  const del = sr(i * 5) * 6;
+  const dur = sr(i * 4) * 8 + 12;
+  const size = sr(i * 6) * 20 + 20;
+  const colors = [
+    ['#f59e0b', '#d97706'],
+    ['#ef4444', '#b91c1c'],
+    ['#8b5cf6', '#6d28d9'],
+    ['#06b6d4', '#0e7490'],
+    ['#f97316', '#ea580c'],
+  ];
+  const [c1, c2] = colors[i % colors.length];
   return (
     <motion.div
-      className="absolute rounded-full pointer-events-none"
-      style={{
-        left: x,
-        top: y,
-        width: size,
-        height: size,
-        background: color,
-        filter: 'blur(60px)',
-        willChange: 'transform, opacity',
-      }}
+      className="absolute pointer-events-none"
+      style={{ left: `${x}%`, bottom: '-10%', willChange: 'transform, opacity' }}
+      initial={{ opacity: 0, y: 0 }}
       animate={{
-        y: [0, -30, 0],
-        opacity: [0.3, 0.6, 0.3],
-        scale: [1, 1.15, 1],
+        opacity: [0, 0.7, 0.7, 0],
+        y: [0, -window.innerHeight * 0.8],
+        x: [0, (sr(i * 11) - 0.5) * 120],
       }}
-      transition={{ duration: 8 + delay, delay, repeat: Infinity, ease: 'easeInOut' }}
-    />
+      transition={{
+        duration: dur,
+        delay: del,
+        repeat: Infinity,
+        ease: 'easeOut',
+      }}
+    >
+      {/* Lantern body */}
+      <div style={{ width: size, height: size * 1.4, position: 'relative' }}>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            background: `radial-gradient(ellipse at 40% 30%, ${c1}dd, ${c2}88)`,
+            borderRadius: '40% 40% 50% 50%',
+            boxShadow: `0 0 ${size * 0.6}px ${c1}66, inset 0 0 ${size * 0.3}px rgba(255,255,255,0.15)`,
+            border: `1px solid ${c1}80`,
+          }}
+        />
+        {/* String */}
+        <div
+          style={{
+            position: 'absolute',
+            top: -12,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 1,
+            height: 12,
+            background: `${c1}80`,
+          }}
+        />
+        {/* Glow core */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: '20%',
+            background: `radial-gradient(circle, ${c1}cc, transparent 70%)`,
+            borderRadius: '50%',
+            filter: 'blur(4px)',
+          }}
+        />
+      </div>
+    </motion.div>
   );
 }
 
-/* ────────────────── Badge ────────────────── */
-function Badge({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
+/* ── Islamic geometric ornament ── */
+function IslamicOrnament({ delay }: { delay?: number }) {
   return (
     <motion.div
-      className="flex items-center gap-2.5 px-4 py-2.5 rounded-full glass-emerald"
-      whileHover={{ scale: 1.06, y: -2 }}
-      transition={{ type: 'spring', stiffness: 400 }}
+      className="flex items-center justify-center gap-3"
+      initial={{ opacity: 0, scaleX: 0 }}
+      animate={{ opacity: 1, scaleX: 1 }}
+      transition={{ duration: 1.2, delay: delay ?? 0, ease: 'easeOut' }}
     >
-      <Icon className="w-4 h-4 text-emerald-400 shrink-0" />
-      <span className="text-white/70 text-sm font-medium whitespace-nowrap">{label}</span>
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-amber-400/50 to-amber-400/80" />
+      <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+      <div className="w-2 h-2 rotate-45 border border-amber-400/60" />
+      <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+      <div className="h-px flex-1 bg-gradient-to-l from-transparent via-amber-400/50 to-amber-400/80" />
     </motion.div>
   );
 }
 
 export default function Hero({ onCreateWish }: HeroProps) {
-  const stars = useMemo(() => Array.from({ length: 60 }, (_, i) => i), []);
+  const stars = useMemo(() => Array.from({ length: 80 }, (_, i) => i), []);
+  const lanterns = useMemo(() => Array.from({ length: 6 }, (_, i) => i), []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20 sm:py-24 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-24 sm:py-32 overflow-hidden">
 
-      {/* ── Background Layer ── */}
+      {/* ── Background ── */}
       <div className="absolute inset-0">
-        {/* Deep base */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse 120% 90% at 50% 0%, #042f2e 0%, #030712 50%, #0a0a1a 100%)',
+            background: 'radial-gradient(ellipse 140% 100% at 50% -10%, #1a0f00 0%, #0a0600 40%, #000000 100%)',
           }}
         />
-
-        {/* Ambient orbs */}
-        <FloatingOrb color="radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%)" size={500} x="10%" y="5%" delay={0} />
-        <FloatingOrb color="radial-gradient(circle, rgba(13,148,136,0.2) 0%, transparent 70%)" size={400} x="60%" y="20%" delay={3} />
-        <FloatingOrb color="radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 70%)" size={350} x="75%" y="60%" delay={6} />
-        <FloatingOrb color="radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)" size={300} x="5%" y="70%" delay={9} />
-
+        {/* Gold rim glow at top */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[50vh]"
+          style={{
+            background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(217,119,6,0.18) 0%, transparent 70%)',
+          }}
+        />
         {/* Stars */}
-        {stars.map((i) => <Star key={i} seed={i * 7} />)}
-
-        {/* Grid lines */}
-        <div
-          className="absolute inset-0 opacity-[0.025]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(16,185,129,1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(16,185,129,1) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-          }}
-        />
-
-        {/* Radial vignette */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(3,7,18,0.8) 100%)',
-          }}
-        />
+        {stars.map(i => <TwinkleStar key={i} i={i} />)}
+        {/* Floating lanterns */}
+        {lanterns.map(i => <Lantern key={i} i={i} />)}
+        {/* Bottom fade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
       </div>
 
-      {/* ── Central Moon Emblem ── */}
+      {/* ── Crescent Moon ── */}
       <motion.div
         className="absolute pointer-events-none"
-        style={{ top: '8%', left: '50%', transform: 'translateX(-50%)' }}
-        initial={{ opacity: 0, scale: 0.6, y: -20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 0.2, ease: 'easeOut' }}
+        style={{ top: '5%', right: '8%' }}
+        initial={{ opacity: 0, scale: 0.5, rotate: -30 }}
+        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+        transition={{ duration: 1.8, delay: 0.3, ease: 'easeOut' }}
       >
-        <div className="relative w-40 h-40 sm:w-52 sm:h-52">
-          {/* Pulse rings */}
-          {[80, 100, 120].map((size, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full border border-emerald-500/20"
-              style={{
-                width: size * 1.4,
-                height: size * 1.4,
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-              }}
-              animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0, 0.4] }}
-              transition={{ duration: 4 + i, delay: i * 1.2, repeat: Infinity }}
-            />
-          ))}
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <svg width="90" height="90" viewBox="0 0 100 100" className="opacity-80 hidden sm:block">
+            <defs>
+              <radialGradient id="moonG" cx="40%" cy="35%">
+                <stop offset="0%" stopColor="#fde68a" />
+                <stop offset="50%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#b45309" />
+              </radialGradient>
+              <filter id="moonGlow">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            </defs>
+            <path d="M 55 15 A 35 35 0 1 1 55 85 A 24 24 0 1 0 55 15" fill="url(#moonG)" filter="url(#moonGlow)" opacity="0.9" />
+          </svg>
+          <div
+            className="absolute inset-0 hidden sm:block"
+            style={{ filter: 'blur(20px)', background: 'radial-gradient(circle, rgba(245,158,11,0.4) 0%, transparent 65%)' }}
+          />
+        </motion.div>
+      </motion.div>
 
-          {/* Moon SVG */}
-          <motion.div
-            animate={{ rotate: [0, 4, -4, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative z-10"
-          >
-            <svg width="100%" height="100%" viewBox="0 0 100 100">
-              <defs>
-                <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6ee7b7" />
-                  <stop offset="40%" stopColor="#10b981" />
-                  <stop offset="100%" stopColor="#047857" />
-                </linearGradient>
-                <filter id="moonGlow">
-                  <feGaussianBlur stdDeviation="2" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-                <radialGradient id="moonGlowGrad" cx="50%" cy="50%">
-                  <stop offset="0%" stopColor="rgba(16,185,129,0.4)" />
-                  <stop offset="100%" stopColor="transparent" />
-                </radialGradient>
-              </defs>
-              {/* Glow */}
-              <circle cx="50" cy="50" r="40" fill="url(#moonGlowGrad)" />
-              {/* Crescent */}
-              <path
-                d="M 50 10 A 40 40 0 1 1 50 90 A 30 30 0 1 0 50 10"
-                fill="url(#moonGrad)"
-                filter="url(#moonGlow)"
-              />
-              {/* Star */}
-              <path
-                d="M 70 35 L 72 41 L 78 41 L 73.5 44.5 L 75.5 51 L 70 47 L 64.5 51 L 66.5 44.5 L 62 41 L 68 41 Z"
-                fill="#fbbf24"
-                opacity="0.9"
-              />
-            </svg>
-          </motion.div>
-        </div>
+      {/* ── Small crescent for mobile ── */}
+      <motion.div
+        className="absolute sm:hidden top-6 right-5 text-3xl"
+        animate={{ rotate: [0, 5, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        🌙
       </motion.div>
 
       {/* ── Main Content ── */}
-      <div className="relative z-10 text-center max-w-5xl mx-auto w-full mt-28 sm:mt-32">
+      <div className="relative z-10 text-center w-full max-w-4xl mx-auto">
 
-        {/* Eyebrow tag */}
+        {/* Arabic Calligraphy Badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="flex justify-center mb-6"
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex justify-center mb-8"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-widest uppercase glass-emerald text-emerald-300 animate-border-glow">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            Eid Mubarak 2026
+          <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full
+            bg-amber-500/10 border border-amber-400/25 text-amber-300/80 text-xs sm:text-sm
+            font-semibold tracking-widest uppercase backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            Eid al-Fitr 1446
           </span>
         </motion.div>
 
-        {/* Arabic title */}
+        {/* Arabic heading */}
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.5 }}
-          className="mb-4"
+          transition={{ duration: 1, delay: 0.55 }}
+          className="mb-3"
         >
           <h2
             className="font-bold leading-none"
             style={{
-              fontSize: 'clamp(2.8rem, 10vw, 6.5rem)',
-              background: 'linear-gradient(135deg, #6ee7b7 0%, #10b981 35%, #34d399 60%, #6ee7b7 100%)',
+              fontSize: 'clamp(3.5rem, 14vw, 8rem)',
+              fontFamily: 'serif',
+              background: 'linear-gradient(135deg, #fde68a 0%, #f59e0b 35%, #fbbf24 65%, #fde68a 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              fontFamily: 'var(--font-amiri), serif',
-              textShadow: '0 0 80px rgba(16,185,129,0.3)',
+              textShadow: '0 0 80px rgba(245,158,11,0.25)',
+              letterSpacing: '-0.01em',
             }}
           >
             عيد مبارك
           </h2>
         </motion.div>
 
+        {/* Gold ornament divider */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.9, delay: 0.75 }}
+          className="my-5 px-4"
+        >
+          <IslamicOrnament />
+        </motion.div>
+
         {/* English headline */}
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.65 }}
-          className="mb-8"
+          transition={{ duration: 0.9, delay: 0.9 }}
+          className="mb-6"
         >
           <h1
             className="font-bold text-white tracking-tight leading-[1.05]"
-            style={{
-              fontSize: 'clamp(2rem, 6vw, 4.75rem)',
-              fontFamily: 'var(--font-playfair), Georgia, serif',
-            }}
+            style={{ fontSize: 'clamp(1.9rem, 5.5vw, 4.2rem)', fontFamily: 'Georgia, serif' }}
           >
-            Create&nbsp;
+            Send{' '}
             <span
               style={{
-                background: 'linear-gradient(135deg, #10b981, #06b6d4, #a855f7)',
+                background: 'linear-gradient(135deg, #f59e0b, #fbbf24, #fde68a)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -254,111 +276,109 @@ export default function Hero({ onCreateWish }: HeroProps) {
             >
               Magical
             </span>
-            <br className="sm:hidden" />
-            &nbsp;Eid Greetings
+            {' '}Eid Greetings
           </h1>
-        </motion.div>
-
-        {/* Divider */}
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 0.7, delay: 0.8 }}
-          className="flex items-center justify-center gap-4 mb-8"
-        >
-          <div className="h-px w-16 sm:w-28 bg-gradient-to-r from-transparent to-emerald-500/40" />
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-          >
-            <Sparkles className="w-5 h-5 text-emerald-400" />
-          </motion.div>
-          <div className="h-px w-16 sm:w-28 bg-gradient-to-l from-transparent to-emerald-500/40" />
         </motion.div>
 
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="text-base sm:text-lg md:text-xl text-white/55 mb-12 max-w-2xl mx-auto leading-relaxed px-4"
+          transition={{ duration: 0.8, delay: 1.05 }}
+          className="text-base sm:text-lg text-white/45 mb-12 max-w-xl mx-auto leading-relaxed px-4"
         >
-          Send heartfelt Eid blessings to your loved ones with stunning animated themes,
-          personalized messages, and one-click sharing.
+          Create beautiful animated Eid wishes with stunning themes — and share them with your loved ones in one tap.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
         >
-          {/* Primary CTA */}
+          {/* Primary */}
           <div className="relative">
             <motion.div
-              className="absolute inset-0 rounded-2xl blur-2xl"
-              style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.5) 0%, transparent 70%)' }}
-              animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
+              className="absolute inset-0 rounded-2xl blur-xl"
+              style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.6) 0%, transparent 70%)' }}
+              animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.9, 0.5] }}
               transition={{ duration: 3, repeat: Infinity }}
             />
-            <Button
+            <motion.button
               onClick={onCreateWish}
-              size="lg"
-              className="relative px-8 sm:px-10 py-6 text-base sm:text-lg font-bold bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 hover:from-emerald-500 hover:via-teal-400 hover:to-emerald-400 text-white rounded-2xl shadow-xl shadow-emerald-900/50 transition-all duration-500 group overflow-hidden border border-emerald-400/30"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="relative px-8 sm:px-10 py-4 sm:py-5 text-base sm:text-lg font-bold text-amber-950
+                rounded-2xl overflow-hidden border border-amber-300/40 group
+                shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+              style={{
+                background: 'linear-gradient(135deg, #fde68a 0%, #f59e0b 45%, #d97706 100%)',
+              }}
             >
-              {/* Shine sweep */}
-              <motion.div
-                className="absolute inset-0 rounded-2xl"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }}
-                animate={{ x: ['-100%', '100%'] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-              />
-              <Sparkles className="w-5 h-5 mr-2.5 relative group-hover:scale-110 transition-transform duration-300" />
-              <span className="relative">Create Your Eid Wish</span>
-              <ArrowRight className="w-5 h-5 ml-2.5 relative group-hover:translate-x-1 transition-transform" />
-            </Button>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <span className="relative flex items-center gap-2.5">
+                <Sparkles className="w-5 h-5" />
+                Create Your Eid Wish
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </motion.button>
           </div>
 
-          {/* Secondary CTA */}
-          <Button
-            variant="outline"
-            size="lg"
+          {/* Secondary */}
+          <motion.button
             onClick={onCreateWish}
-            className="px-8 py-6 text-base sm:text-lg font-semibold rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-white/80 transition-all duration-300 backdrop-blur-sm"
+            whileHover={{ scale: 1.03, y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            className="px-8 py-4 sm:py-5 text-base sm:text-lg font-semibold rounded-2xl
+              border border-amber-400/20 bg-white/5 hover:bg-white/10 hover:border-amber-400/35
+              text-white/70 hover:text-white/90 transition-all duration-300 backdrop-blur-sm"
           >
-            View Themes
-          </Button>
+            Browse Themes
+          </motion.button>
         </motion.div>
 
-        {/* Feature Badges */}
+        {/* Feature badges */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.15 }}
-          className="flex flex-wrap justify-center gap-3"
+          transition={{ duration: 0.8, delay: 1.35 }}
+          className="flex flex-wrap justify-center gap-2 sm:gap-3"
         >
-          <Badge icon={Zap} label="5 Stunning Themes" />
-          <Badge icon={Sparkles} label="Animated Effects" />
-          <Badge icon={Globe} label="Instant Sharing" />
-          <Badge icon={Heart} label="100% Free" />
+          {[
+            { emoji: '🌙', label: '5 Stunning Themes' },
+            { emoji: '✨', label: 'Live Animations' },
+            { emoji: '🎵', label: 'Background Music' },
+            { emoji: '💌', label: '1-tap Sharing' },
+            { emoji: '🆓', label: '100% Free' },
+          ].map(({ emoji, label }) => (
+            <motion.div
+              key={label}
+              whileHover={{ scale: 1.06, y: -2 }}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-full
+                bg-amber-500/8 border border-amber-400/15 backdrop-blur-sm"
+            >
+              <span className="text-sm">{emoji}</span>
+              <span className="text-white/55 text-xs sm:text-sm font-medium whitespace-nowrap">{label}</span>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
 
-      {/* ── Bottom Scroll Hint ── */}
+      {/* ── Scroll hint ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
+        transition={{ delay: 2.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
       >
         <span className="text-white/20 text-xs tracking-widest uppercase">Scroll</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-5 h-8 rounded-full border border-white/15 flex items-start justify-center pt-1.5"
+          className="w-5 h-8 rounded-full border border-amber-400/20 flex items-start justify-center pt-1.5"
         >
-          <div className="w-1 h-2 rounded-full bg-emerald-400/60" />
+          <div className="w-1 h-2 rounded-full bg-amber-400/50" />
         </motion.div>
       </motion.div>
     </section>

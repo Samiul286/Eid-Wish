@@ -399,20 +399,14 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                             Dear
                           </span>
                         </h1>
-                        <LetterReveal
-                          text={receiverName}
-                          delay={0.8}
-                          className="text-4xl md:text-6xl font-bold"
-                        >
-                        </LetterReveal>
-                        <motion.span
-                          className="block text-4xl md:text-6xl font-bold bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 1.5 }}
+                        <motion.div
+                          className="mt-2 text-4xl md:text-6xl font-bold bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.8, duration: 0.8 }}
                         >
                           {receiverName}
-                        </motion.span>
+                        </motion.div>
                       </motion.div>
                     </div>
 
@@ -517,41 +511,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                 </motion.div>
               </div>
 
-              {/* Share buttons */}
-              <motion.div
-                className="mt-10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.4 }}
-              >
-                <ShareButtons
-                  receiverName={receiverName}
-                  senderName={senderName}
-                  message={message}
-                  theme="love"
-                />
-              </motion.div>
 
-              {/* Create own wish */}
-              <motion.div
-                className="mt-8 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.6 }}
-              >
-                <Link href="/">
-                  <Button
-                    className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-full px-8 py-6 shadow-lg"
-                    style={{
-                      boxShadow: '0 10px 40px -10px rgba(225, 29, 99, 0.5)',
-                    }}
-                  >
-                    <Heart className="w-5 h-5 mr-2 fill-white" />
-                    Create Your Own Love Letter
-                    <Heart className="w-5 h-5 ml-2 fill-white" />
-                  </Button>
-                </Link>
-              </motion.div>
             </motion.div>
           </motion.div>
         )}

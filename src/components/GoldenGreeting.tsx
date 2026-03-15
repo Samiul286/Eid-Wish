@@ -629,51 +629,7 @@ export default function GoldenGreeting({ receiverName, senderName, message }: Go
                 ))}
               </div>
 
-              {/* Share buttons */}
-              <motion.div
-                className="mt-12"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.6 }}
-              >
-                <ShareButtons
-                  receiverName={receiverName}
-                  senderName={senderName}
-                  message={message}
-                  theme="golden"
-                />
-              </motion.div>
 
-              {/* Create own wish */}
-              <motion.div
-                className="mt-8 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.8 }}
-              >
-                <Link href="/">
-                  <Button
-                    className="relative overflow-hidden rounded-full px-8 py-6 font-semibold text-amber-900"
-                    style={{
-                      background: 'linear-gradient(135deg, #b8860b, #daa520, #ffd700)',
-                    }}
-                  >
-                    <motion.div
-                      className="absolute inset-0"
-                      style={{
-                        background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
-                      }}
-                      animate={{ x: ['-100%', '100%'] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                    />
-                    <span className="relative flex items-center">
-                      <Crown className="w-5 h-5 mr-2" />
-                      Create Your Royal Greeting
-                      <Sparkles className="w-4 h-4 ml-2" />
-                    </span>
-                  </Button>
-                </Link>
-              </motion.div>
             </motion.div>
           </motion.div>
         )}

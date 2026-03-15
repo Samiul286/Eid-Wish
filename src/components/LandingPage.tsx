@@ -6,14 +6,11 @@ import ThemePreview from '@/components/ThemePreview';
 import HowItWorks from '@/components/HowItWorks';
 import WishCreator from '@/components/WishCreator';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
 export default function LandingPage() {
   const [showCreator, setShowCreator] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<string | undefined>(undefined);
   const creatorRef = useRef<HTMLDivElement>(null);
-  const { isMobile, isLowEnd } = useDeviceCapabilities();
-  const prefersReducedMotion = useReducedMotion();
 
   const handleCreateWish = () => {
     setShowCreator(true);
@@ -31,41 +28,12 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="min-h-screen relative">
-      {/* Fixed background */}
-      <div className="fixed inset-0 pointer-events-none -z-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(180deg, #030712 0%, #0a0f1a 30%, #0d1117 60%, #030712 100%)',
-          }}
-        />
-        {/* Subtle ambient orbs — desktop only */}
-        {!isMobile && !isLowEnd && !prefersReducedMotion && (
-          <>
-            <motion.div
-              className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full"
-              style={{
-                background: 'radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 60%)',
-                filter: 'blur(50px)',
-                willChange: 'transform, opacity',
-              }}
-              animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
-              transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <motion.div
-              className="absolute bottom-1/3 right-1/4 w-[300px] h-[300px] rounded-full"
-              style={{
-                background: 'radial-gradient(circle, rgba(6,182,212,0.04) 0%, transparent 60%)',
-                filter: 'blur(40px)',
-                willChange: 'transform, opacity',
-              }}
-              animate={{ scale: [1.1, 1, 1.1], opacity: [0.3, 0.55, 0.3] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-            />
-          </>
-        )}
-      </div>
+    <main className="min-h-screen relative" style={{ background: '#000' }}>
+      {/* Fixed ambient background */}
+      <div
+        className="fixed inset-0 pointer-events-none -z-10"
+        style={{ background: 'radial-gradient(ellipse 100% 60% at 50% 0%, #1a0f00 0%, #050300 40%, #000 100%)' }}
+      />
 
       {/* Hero */}
       <Hero onCreateWish={handleCreateWish} />
@@ -76,7 +44,7 @@ export default function LandingPage() {
       {/* How It Works */}
       <HowItWorks />
 
-      {/* Wish Creator */}
+      {/* Wish Creator section */}
       <AnimatePresence>
         {showCreator && (
           <motion.section
@@ -87,34 +55,14 @@ export default function LandingPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Background */}
+            {/* Warm ambient background */}
             <div
               className="absolute inset-0"
               style={{
-                background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16,185,129,0.06) 0%, #030712 60%)',
+                background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(217,119,6,0.07) 0%, #000 55%)',
               }}
             />
-            <div className="section-divider absolute top-0 left-0 right-0" />
-
-            {/* Decorative elements — desktop only */}
-            {!isMobile && !prefersReducedMotion && (
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <motion.div
-                  className="absolute top-12 left-12 text-4xl opacity-[0.04]"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-                >
-                  ✦
-                </motion.div>
-                <motion.div
-                  className="absolute bottom-12 right-12 text-5xl opacity-[0.04]"
-                  animate={{ rotate: [360, 0] }}
-                  transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
-                >
-                  ✦
-                </motion.div>
-              </div>
-            )}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/20 to-transparent" />
 
             <div className="relative z-10 max-w-2xl mx-auto">
               <motion.div
@@ -131,16 +79,13 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="relative py-14 sm:py-16 px-4 overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/15 to-transparent" />
         <div
           className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(0deg, #030712 0%, #060d12 50%, #030712 100%)',
-          }}
+          style={{ background: 'linear-gradient(0deg, #020100 0%, #050200 100%)' }}
         />
-        <div className="section-divider absolute top-0 left-0 right-0" />
 
         <div className="relative z-10 max-w-5xl mx-auto">
-          {/* Content */}
           <div className="flex flex-col items-center text-center">
             {/* Brand */}
             <motion.div
@@ -149,21 +94,21 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="mb-5"
             >
-              <motion.span
+              <motion.div
                 animate={{ rotate: [0, 360] }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="inline-block text-4xl mb-3"
+                transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+                className="text-4xl mb-3"
               >
                 🌙
-              </motion.span>
+              </motion.div>
               <h3
                 className="text-2xl font-bold"
                 style={{
-                  background: 'linear-gradient(135deg, #10b981, #34d399)',
+                  background: 'linear-gradient(135deg, #fde68a, #f59e0b)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
-                  fontFamily: 'var(--font-playfair), Georgia, serif',
+                  fontFamily: 'Georgia, serif',
                 }}
               >
                 EidWish
@@ -175,12 +120,12 @@ export default function LandingPage() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-white/35 max-w-sm mx-auto text-sm mb-8 leading-relaxed"
+              className="text-white/30 max-w-sm mx-auto text-sm mb-8 leading-relaxed"
             >
-              Spreading joy and blessings this Eid through beautiful personalized greetings.
+              Spreading Eid joy through beautiful personalized greetings with love.
             </motion.p>
 
-            {/* Separator */}
+            {/* Ornament */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -188,23 +133,23 @@ export default function LandingPage() {
               transition={{ delay: 0.3 }}
               className="flex items-center gap-4 mb-8"
             >
-              <div className="w-10 h-px bg-gradient-to-r from-transparent to-white/10" />
+              <div className="w-10 h-px bg-gradient-to-r from-transparent to-amber-400/20" />
               <motion.span
-                animate={{ scale: [1, 1.25, 1] }}
+                animate={{ scale: [1, 1.3, 1] }}
                 transition={{ duration: 2.5, repeat: Infinity }}
-                className="text-emerald-400/50"
+                className="text-amber-400/40 text-sm"
               >
                 ✦
               </motion.span>
-              <span className="text-white/25 text-xs">Made with ❤️ for the Muslim Ummah</span>
+              <span className="text-white/20 text-xs">Made with ❤️ for the Muslim Ummah</span>
               <motion.span
-                animate={{ scale: [1, 1.25, 1] }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-                className="text-emerald-400/50"
+                animate={{ scale: [1, 1.3, 1] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: 1 }}
+                className="text-amber-400/40 text-sm"
               >
                 ✦
               </motion.span>
-              <div className="w-10 h-px bg-gradient-to-l from-transparent to-white/10" />
+              <div className="w-10 h-px bg-gradient-to-l from-transparent to-amber-400/20" />
             </motion.div>
           </div>
 
@@ -214,19 +159,19 @@ export default function LandingPage() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="pt-6 border-t border-white/[0.04]"
+            className="pt-6 border-t border-amber-400/[0.06]"
           >
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-white/20 text-xs">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-white/15 text-xs">
               <p>© {new Date().getFullYear()} EidWish. All rights reserved.</p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <motion.span
                   animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-                  className="text-base"
+                  transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
+                  className="text-amber-400/40"
                 >
                   ☪
                 </motion.span>
-                <span>Eid Mubarak</span>
+                <span className="text-amber-400/30">Eid Mubarak</span>
               </div>
             </div>
           </motion.div>
