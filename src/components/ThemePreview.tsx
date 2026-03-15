@@ -3,40 +3,39 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { themes } from '@/types/wish';
-import { Check, Sparkles } from 'lucide-react';
+import { Check, Sparkles, ChevronRight } from 'lucide-react';
 
 interface ThemePreviewProps {
   onSelectTheme?: (themeId: string) => void;
   selectedTheme?: string;
 }
 
-// Seeded pseudo-random number generator
 function seededRandom(seed: number): number {
   const x = Math.sin(seed * 12.9898 + seed * 78.233) * 43758.5453;
   return x - Math.floor(x);
 }
 
-// Floating particle for theme cards
-function ThemeParticle({ delay }: { delay: number }) {
+function ThemeParticle({ seed, color }: { seed: number; color: string }) {
+  const left = seededRandom(seed) * 80 + 10;
+  const duration = seededRandom(seed + 1) * 2 + 2;
+  const delay = seededRandom(seed + 2) * 2;
+
   return (
     <motion.div
       className="absolute w-1 h-1 rounded-full pointer-events-none"
       style={{
-        background: 'rgba(255, 215, 0, 0.6)',
-        willChange: 'transform, opacity'
+        left: `${left}%`,
+        bottom: '10%',
+        background: color,
+        willChange: 'transform, opacity',
       }}
-      initial={{ y: 0, opacity: 0 }}
       animate={{
-        y: [0, -40, -80],
-        opacity: [0, 1, 0],
-        x: [0, seededRandom(delay) * 20 - 10],
+        y: [0, -60, -90],
+        opacity: [0, 0.9, 0],
+        x: [0, seededRandom(seed + 3) * 20 - 10],
+        scale: [1, 1.5, 0],
       }}
-      transition={{
-        duration: 3,
-        delay: delay * 0.5,
-        repeat: Infinity,
-        ease: 'easeOut',
-      }}
+      transition={{ duration, delay, repeat: Infinity, ease: 'easeOut' }}
     />
   );
 }
@@ -45,207 +44,197 @@ export default function ThemePreview({ onSelectTheme, selectedTheme }: ThemePrev
   const themeList = useMemo(() => Object.values(themes), []);
 
   return (
-    <section className="relative py-28 px-4 overflow-hidden">
+    <section className="relative py-24 sm:py-32 px-4 overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(
-            180deg,
-            #080508 0%,
-            #0c0810 20%,
-            #100c18 40%,
-            #151020 60%,
-            #100c18 80%,
-            #080508 100%
-          )`,
+          background: 'linear-gradient(180deg, #030712 0%, #0a0f1e 40%, #080d1a 60%, #030712 100%)',
         }}
       />
 
-      {/* Decorative pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23d4af37'%3E%3Cpath d='M40 0 L50 30 L80 40 L50 50 L40 80 L30 50 L0 40 L30 30 Z'/%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
+      {/* Section dividers */}
+      <div className="section-divider absolute top-0 left-0 right-0" />
+      <div className="section-divider absolute bottom-0 left-0 right-0" />
 
       {/* Ambient glow */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.05) 0%, transparent 60%)',
-          willChange: 'transform, opacity'
+          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(16,185,129,0.04) 0%, transparent 70%)',
         }}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.5, 0.8, 0.5],
-        }}
+        animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 6, repeat: Infinity }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Section header */}
+
+        {/* Header */}
         <motion.div
-          className="text-center mb-20"
+          className="text-center mb-14 sm:mb-20"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          {/* Decorative top */}
+          {/* Tag */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
+            initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="flex items-center justify-center gap-4 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-emerald mb-6 text-emerald-300 text-xs sm:text-sm font-semibold tracking-widest uppercase"
           >
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-amber-400/40" />
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-            >
-              <Sparkles className="w-6 h-6 text-amber-400" />
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}>
+              <Sparkles className="w-3.5 h-3.5" />
             </motion.div>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-amber-400/40" />
+            Pick Your Vibe
           </motion.div>
 
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+            className="font-bold text-white leading-tight mb-5"
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+              fontFamily: 'var(--font-playfair), Georgia, serif',
+            }}
           >
+            Exquisite{' '}
             <span
               style={{
-                background: 'linear-gradient(135deg, #b8860b 0%, #ffd700 40%, #daa520 60%, #b8860b 100%)',
+                background: 'linear-gradient(135deg, #10b981, #06b6d4, #a855f7)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
               }}
             >
-              Exquisite Themes
+              Themes
             </span>
           </h2>
 
-          <p className="text-white/50 max-w-lg mx-auto text-lg leading-relaxed">
-            Choose from 5 beautifully crafted themes to make your Eid greeting truly memorable
+          <p className="text-white/45 text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
+            Five beautifully crafted animated themes — each one designed to make your Eid greeting truly unforgettable.
           </p>
         </motion.div>
 
-        {/* Theme cards - Horizontal scroll on mobile, grid on desktop */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+        {/* Theme Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-5">
           {themeList.map((theme, index) => {
             const isSelected = selectedTheme === theme.id;
             return (
               <motion.div
                 key={theme.id}
                 className="relative group cursor-pointer"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => onSelectTheme?.(theme.id)}
               >
-                {/* Card container */}
                 <motion.div
-                  className={`relative aspect-[3/4] rounded-2xl overflow-hidden transition-all duration-500 ${
-                    isSelected ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/50' : ''
+                  className={`relative aspect-[3/4] rounded-2xl overflow-hidden transition-all duration-400 ${
+                    isSelected
+                      ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-black/60'
+                      : 'ring-1 ring-white/8'
                   }`}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
+                  whileHover={{ y: -8, scale: 1.03 }}
+                  transition={{ type: 'spring', stiffness: 280, damping: 18 }}
                 >
-                  {/* Theme background gradient */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${theme.previewGradient}`}
-                  />
+                  {/* Theme gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${theme.previewGradient}`} />
 
-                  {/* Floating particles */}
+                  {/* Particles */}
                   <div className="absolute inset-0 overflow-hidden">
-                    {[...Array(5)].map((_, i) => (
-                      <ThemeParticle key={i} delay={i + index} />
+                    {[...Array(4)].map((_, i) => (
+                      <ThemeParticle key={i} seed={i * (index + 1) * 3} color="rgba(255,255,255,0.7)" />
                     ))}
                   </div>
 
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
-                  {/* Shimmer effect on hover */}
+                  {/* Shimmer on hover */}
                   <motion.div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
-                      background: 'linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%)',
+                      background: 'linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%)',
                     }}
                     animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: 'linear' }}
                   />
 
-                  {/* Emoji icon */}
+                  {/* Emoji */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <motion.div
-                      className="text-6xl md:text-7xl"
-                      whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+                      className="text-5xl sm:text-6xl"
+                      whileHover={{ scale: 1.2, rotate: [-5, 5, -5, 0] }}
                       transition={{ duration: 0.4 }}
                     >
                       {theme.emoji}
                     </motion.div>
                   </div>
 
-                  {/* Bottom info */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 + 0.3 }}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <h3 className="text-white font-semibold text-base md:text-lg">{theme.name}</h3>
-                        {isSelected && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center"
-                          >
-                            <Check className="w-3 h-3 text-black" />
-                          </motion.div>
-                        )}
-                      </div>
-                      <p className="text-white/40 text-xs md:text-sm line-clamp-2 leading-relaxed">
-                        {theme.description}
-                      </p>
-                    </motion.div>
+                  {/* Info */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <h3 className="text-white font-bold text-sm sm:text-base leading-tight">{theme.name}</h3>
+                      {isSelected && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="w-5 h-5 bg-emerald-400 rounded-full flex items-center justify-center shrink-0"
+                        >
+                          <Check className="w-3 h-3 text-black" strokeWidth={3} />
+                        </motion.div>
+                      )}
+                    </div>
+                    <p className="text-white/45 text-xs line-clamp-2 leading-relaxed hidden sm:block">
+                      {theme.description}
+                    </p>
                   </div>
 
-                  {/* Selection indicator */}
+                  {/* Selected badge */}
                   {isSelected && (
                     <motion.div
-                      className="absolute top-3 right-3 px-3 py-1 bg-yellow-400 text-black text-xs font-medium rounded-full"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
+                      className="absolute top-2.5 right-2.5 px-2.5 py-1 bg-emerald-400 text-black text-xs font-bold rounded-full"
+                      initial={{ scale: 0, rotate: -10 }}
+                      animate={{ scale: 1, rotate: 0 }}
                     >
-                      Selected
+                      ✓ Chosen
                     </motion.div>
                   )}
+
+                  {/* Hover CTA */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: 'rgba(0,0,0,0.2)' }}
+                  >
+                    {!isSelected && (
+                      <div className="flex items-center gap-1.5 px-4 py-2 rounded-full glass text-white text-sm font-semibold">
+                        Use This
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                    )}
+                  </motion.div>
                 </motion.div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Bottom decorative element */}
+        {/* Divider decoration */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex justify-center mt-16"
+          className="flex justify-center mt-14"
         >
-          <div className="flex items-center gap-4">
-            <div className="h-px w-20 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent" />
+          <div className="flex items-center gap-3">
+            <div className="h-px w-16 sm:w-24 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
             <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-2 h-2 rounded-full bg-amber-400/50"
+              animate={{ scale: [1, 1.4, 1] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
+              className="w-2 h-2 rounded-full bg-emerald-400/50"
             />
-            <div className="h-px w-20 bg-gradient-to-l from-transparent via-amber-400/20 to-transparent" />
+            <div className="h-px w-16 sm:w-24 bg-gradient-to-l from-transparent via-emerald-500/20 to-transparent" />
           </div>
         </motion.div>
       </div>

@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display, Amiri } from "next/font/google";
+import { Inter, Playfair_Display, Amiri } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const geistSans = Geist({
+const inter = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
@@ -66,9 +62,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${amiri.variable} antialiased bg-[#0a0a1a]`}>
+      <body className={`${inter.variable} ${playfair.variable} ${amiri.variable} antialiased bg-[#030712]`}>
         {/* Background stars - fixed */}
-        <div className="fixed inset-0 stars-bg opacity-30 pointer-events-none" />
+        <div className="fixed inset-0 stars-bg opacity-20 pointer-events-none" />
         
         {/* Main content */}
         {children}
