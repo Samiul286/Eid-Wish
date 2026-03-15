@@ -257,19 +257,26 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                   </motion.div>
                 )}
                 
-                {/* Letter peeking out */}
+                {/* Clip window — covers the envelope pocket so the card is hidden inside until it rises */}
                 {envelopeOpen && (
-                  <motion.div
-                    className="absolute inset-x-4 bottom-4 top-8 bg-white rounded-lg shadow-lg overflow-hidden"
-                    initial={{ y: 100 }}
-                    animate={{ y: -80 }}
-                    transition={{ duration: 1, ease: 'easeOut' }}
+                  <div
+                    className="absolute inset-x-4 bottom-0"
+                    style={{ height: '100%', overflow: 'hidden', pointerEvents: 'none' }}
                   >
-                    <div className="p-4 text-center">
-                      <p className="text-rose-400 font-medium text-sm md:text-base">A special message...</p>
-                      <Heart className="w-6 h-6 text-pink-400 fill-pink-400 mx-auto mt-2" />
-                    </div>
-                  </motion.div>
+                    {/* Letter rising out of the envelope */}
+                    <motion.div
+                      className="absolute inset-x-0 bottom-0 bg-white rounded-lg shadow-lg overflow-hidden"
+                      style={{ height: '85%' }}
+                      initial={{ y: '100%' }}
+                      animate={{ y: '-55%' }}
+                      transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+                    >
+                      <div className="p-4 text-center">
+                        <p className="text-rose-400 font-medium text-sm md:text-base">A special message...</p>
+                        <Heart className="w-6 h-6 text-pink-400 fill-pink-400 mx-auto mt-2" />
+                      </div>
+                    </motion.div>
+                  </div>
                 )}
               </div>
             </motion.div>
