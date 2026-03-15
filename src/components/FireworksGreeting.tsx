@@ -8,6 +8,7 @@ import { DEFAULT_MESSAGE, incrementViewCount, generateWishId } from '@/types/wis
 import FireworksTheme from './ThemeBackgrounds/FireworksTheme';
 import ShareButtons from './ShareButtons';
 import Link from 'next/link';
+import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
 interface FireworksGreetingProps {
   receiverName: string;
@@ -277,27 +278,33 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
   const [showContent, setShowContent] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isMobile, isLowEnd } = useDeviceCapabilities();
+  const prefersReducedMotion = useReducedMotion();
 
   const [viewCount] = useState(() => {
     const wishId = generateWishId(receiverName, senderName);
     return getAndIncrementViewCount(wishId);
   });
 
+  // Reduce particle effects on mobile
+  const particleBurstCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 1 : 3;
+  const pulsingStarCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 2 : 4;
+
   const particleBursts = useMemo(() => {
-    return Array.from({ length: 3 }, (_, i) => ({
+    return Array.from({ length: particleBurstCount }, (_, i) => ({
       x: seededRandom(i * 7) * 80 + 10,
       y: seededRandom(i * 7 + 1) * 60 + 20,
       delay: i * 0.5,
     }));
-  }, []);
+  }, [particleBurstCount]);
 
   const pulsingStars = useMemo(() => {
-    return Array.from({ length: 4 }, (_, i) => ({
+    return Array.from({ length: pulsingStarCount }, (_, i) => ({
       x: seededRandom(i * 11) * 90 + 5,
       y: seededRandom(i * 11 + 1) * 70 + 15,
       delay: seededRandom(i * 11 + 2) * 2,
     }));
-  }, []);
+  }, [pulsingStarCount]);
 
   useEffect(() => {
     const timers = [

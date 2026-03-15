@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
 interface FireworksThemeProps {
   children?: React.ReactNode;
@@ -30,6 +31,7 @@ function SparkleParticle({ seed }: { seed: number }) {
         width: size,
         height: size,
         background: `radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 50%, transparent 70%)`,
+        willChange: 'transform, opacity',
       }}
       animate={{
         opacity: [0, 1, 0],
@@ -46,18 +48,22 @@ function SparkleParticle({ seed }: { seed: number }) {
 }
 
 // Firework Burst Component
-function FireworkBurst({ seed, index }: { seed: number; index: number }) {
+function FireworkBurst({ seed, index, isMobile }: { seed: number; index: number; isMobile: boolean }) {
   const centerX = seededRandom(seed * 5) * 80 + 10;
   const centerY = seededRandom(seed * 5 + 1) * 50 + 5;
   const hue = seededRandom(seed * 5 + 2) * 360;
+  
+  // Reduce particles on mobile
+  const particleCount = isMobile ? 12 : 24;
+  
   const particles = useMemo(() => {
-    return Array.from({ length: 24 }, (_, i) => ({
-      angle: (i / 24) * 360,
+    return Array.from({ length: particleCount }, (_, i) => ({
+      angle: (i / particleCount) * 360,
       distance: seededRandom(seed * 5 + 3 + i) * 30 + 40,
       size: seededRandom(seed * 5 + 4 + i) * 4 + 2,
       delay: seededRandom(seed * 5 + 5 + i) * 0.3,
     }));
-  }, [seed]);
+  }, [seed, particleCount]);
 
   const duration = 3;
   const baseDelay = index * 1.5;
@@ -87,6 +93,7 @@ function FireworkBurst({ seed, index }: { seed: number; index: number }) {
           top: -10,
           background: `radial-gradient(circle, hsla(${hue}, 100%, 80%, 0.8) 0%, hsla(${hue}, 100%, 60%, 0.3) 40%, transparent 70%)`,
           filter: 'blur(4px)',
+          willChange: 'transform, opacity',
         }}
         animate={{
           scale: [0.5, 2, 1],
@@ -115,6 +122,7 @@ function FireworkBurst({ seed, index }: { seed: number; index: number }) {
               background: `linear-gradient(to bottom, hsla(${hue + seededRandom(i) * 30}, 100%, 70%, 1), hsla(${hue}, 100%, 50%, 0.5), transparent)`,
               borderRadius: '50%',
               filter: 'blur(0.5px)',
+              willChange: 'transform, opacity',
             }}
             initial={{ x: 0, y: 0, opacity: 0, scale: 0 }}
             animate={{
@@ -176,7 +184,7 @@ function RisingRocket({ seed, index }: { seed: number; index: number }) {
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{ left: `${left}%`, bottom: 0 }}
+      style={{ left: `${left}%`, bottom: 0, willChange: 'transform, opacity' }}
       initial={{ y: 0, opacity: 0 }}
       animate={{
         y: [0, -400, -500],
@@ -199,6 +207,7 @@ function RisingRocket({ seed, index }: { seed: number; index: number }) {
           bottom: 0,
           background: `linear-gradient(to top, transparent, hsla(${hue}, 100%, 70%, 0.6), hsla(${hue}, 100%, 80%, 0.8))`,
           filter: 'blur(2px)',
+          willChange: 'transform',
         }}
         animate={{
           scaleY: [0.5, 1, 0.8],
@@ -238,6 +247,7 @@ function GlowingOrb({ seed }: { seed: number }) {
         height: size,
         background: `radial-gradient(circle, hsla(${hue}, 80%, 50%, 0.15) 0%, hsla(${hue}, 70%, 40%, 0.05) 50%, transparent 70%)`,
         filter: 'blur(30px)',
+        willChange: 'transform, opacity',
       }}
       animate={{
         scale: [1, 1.3, 1],
@@ -270,6 +280,7 @@ function FallingStreamer({ seed }: { seed: number }) {
         height: 30,
         background: `linear-gradient(180deg, transparent, hsla(${hue}, 100%, 60%, 0.8), hsla(${hue}, 100%, 70%, 0.4), transparent)`,
         borderRadius: 2,
+        willChange: 'transform',
       }}
       initial={{ y: 0, rotate: 0 }}
       animate={{
@@ -288,25 +299,35 @@ function FallingStreamer({ seed }: { seed: number }) {
 }
 
 export default function FireworksTheme({ children }: FireworksThemeProps) {
+  const { isMobile, isLowEnd } = useDeviceCapabilities();
+  const prefersReducedMotion = useReducedMotion();
+
+  // Reduce particle counts on mobile and low-end devices
+  const sparkleCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 20 : 60;
+  const fireworkBurstCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 3 : 8;
+  const rocketCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 2 : 5;
+  const orbCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 2 : 4;
+  const streamerCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 5 : 15;
+
   const sparkles = useMemo(() => {
-    return Array.from({ length: 60 }, (_, i) => ({ seed: i * 7 }));
-  }, []);
+    return Array.from({ length: sparkleCount }, (_, i) => ({ seed: i * 7 }));
+  }, [sparkleCount]);
 
   const fireworkBursts = useMemo(() => {
-    return Array.from({ length: 8 }, (_, i) => ({ seed: i * 17, index: i }));
-  }, []);
+    return Array.from({ length: fireworkBurstCount }, (_, i) => ({ seed: i * 17, index: i }));
+  }, [fireworkBurstCount]);
 
   const rockets = useMemo(() => {
-    return Array.from({ length: 5 }, (_, i) => ({ seed: i * 23, index: i }));
-  }, []);
+    return Array.from({ length: rocketCount }, (_, i) => ({ seed: i * 23, index: i }));
+  }, [rocketCount]);
 
   const orbs = useMemo(() => {
-    return Array.from({ length: 4 }, (_, i) => ({ seed: i * 31 }));
-  }, []);
+    return Array.from({ length: orbCount }, (_, i) => ({ seed: i * 31 }));
+  }, [orbCount]);
 
   const streamers = useMemo(() => {
-    return Array.from({ length: 15 }, (_, i) => ({ seed: i * 11 }));
-  }, []);
+    return Array.from({ length: streamerCount }, (_, i) => ({ seed: i * 11 }));
+  }, [streamerCount]);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -355,7 +376,7 @@ export default function FireworksTheme({ children }: FireworksThemeProps) {
 
       {/* Firework bursts */}
       {fireworkBursts.map((burst, i) => (
-        <FireworkBurst key={i} {...burst} />
+        <FireworkBurst key={i} {...burst} isMobile={isMobile || isLowEnd} />
       ))}
 
       {/* Falling streamers */}

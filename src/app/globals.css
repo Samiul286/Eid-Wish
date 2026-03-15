@@ -102,6 +102,63 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
   overflow-x: hidden;
   background: #0a0a1a;
+  /* Performance optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Performance optimizations for animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU acceleration for animated elements */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  /* Reduce blur effects on mobile */
+  .glass {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .glass-dark {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* Simplify shadows on mobile */
+  .glow {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  }
+  
+  /* Reduce animation complexity */
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .theme-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.4);
+  }
 }
 
 /* Glassmorphism utility */

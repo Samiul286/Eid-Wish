@@ -8,6 +8,7 @@ import { DEFAULT_MESSAGE, incrementViewCount, generateWishId } from '@/types/wis
 import MoonTheme from './ThemeBackgrounds/MoonTheme';
 import ShareButtons from './ShareButtons';
 import Link from 'next/link';
+import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
 interface MoonGreetingProps {
   receiverName: string;
@@ -166,15 +167,19 @@ export default function MoonGreeting({ receiverName, senderName, message }: Moon
   const [showContent, setShowContent] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isMobile, isLowEnd } = useDeviceCapabilities();
+  const prefersReducedMotion = useReducedMotion();
 
   const [viewCount] = useState(() => {
     const wishId = generateWishId(receiverName, senderName);
     return getAndIncrementViewCount(wishId);
   });
 
+  // Reduce floating moons on mobile
+  const floatingMoonCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 1 : 3;
   const floatingMoons = useMemo(() => {
-    return Array.from({ length: 3 }, (_, i) => ({ delay: i * 0.3 }));
-  }, []);
+    return Array.from({ length: floatingMoonCount }, (_, i) => ({ delay: i * 0.3 }));
+  }, [floatingMoonCount]);
 
   useEffect(() => {
     const timers = [

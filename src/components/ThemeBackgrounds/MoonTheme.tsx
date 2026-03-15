@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
 interface MoonThemeProps {
   children?: React.ReactNode;
@@ -30,6 +31,7 @@ function TwinklingStar({ seed }: { seed: number }) {
         width: size,
         height: size,
         background: `radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 215, 0, 0.5) 50%, transparent 70%)`,
+        willChange: 'transform, opacity',
       }}
       animate={{
         opacity: [0.2, 1, 0.2],
@@ -63,6 +65,7 @@ function ShootingStar({ seed }: { seed: number }) {
         background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,215,0,0.8) 100%)',
         transform: 'rotate(-45deg)',
         borderRadius: 2,
+        willChange: 'transform, opacity',
       }}
       initial={{ opacity: 0, x: 0, y: 0 }}
       animate={{
@@ -174,6 +177,7 @@ function Nebula() {
         style={{
           background: 'radial-gradient(ellipse at center, rgba(30, 60, 114, 0.3) 0%, transparent 60%)',
           filter: 'blur(40px)',
+          willChange: 'transform, opacity',
         }}
         animate={{
           scale: [1, 1.2, 1],
@@ -186,6 +190,7 @@ function Nebula() {
         style={{
           background: 'radial-gradient(ellipse at center, rgba(57, 73, 171, 0.2) 0%, transparent 50%)',
           filter: 'blur(30px)',
+          willChange: 'transform, opacity',
         }}
         animate={{
           scale: [1.1, 1, 1.1],
@@ -198,13 +203,20 @@ function Nebula() {
 }
 
 export default function MoonTheme({ children }: MoonThemeProps) {
+  const { isMobile, isLowEnd } = useDeviceCapabilities();
+  const prefersReducedMotion = useReducedMotion();
+
+  // Reduce particle count on mobile and low-end devices
+  const starCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 30 : 80;
+  const shootingStarCount = prefersReducedMotion ? 0 : (isMobile || isLowEnd) ? 2 : 5;
+
   const stars = useMemo(() => {
-    return Array.from({ length: 80 }, (_, i) => ({ seed: i * 7 }));
-  }, []);
+    return Array.from({ length: starCount }, (_, i) => ({ seed: i * 7 }));
+  }, [starCount]);
 
   const shootingStars = useMemo(() => {
-    return Array.from({ length: 5 }, (_, i) => ({ seed: i * 13 }));
-  }, []);
+    return Array.from({ length: shootingStarCount }, (_, i) => ({ seed: i * 13 }));
+  }, [shootingStarCount]);
 
   const constellationPoints = useMemo(() => [
     { x: 15, y: 20 }, { x: 18, y: 25 }, { x: 22, y: 22 },
@@ -234,30 +246,32 @@ export default function MoonTheme({ children }: MoonThemeProps) {
       {/* Islamic geometric pattern */}
       <IslamicPattern />
 
-      {/* Nebula effects */}
-      <Nebula />
+      {/* Nebula effects - skip on mobile for performance */}
+      {!isMobile && !prefersReducedMotion && <Nebula />}
 
       {/* Large crescent moon */}
       <LargeCrescentMoon />
 
-      {/* Constellation in top-left */}
-      <div className="absolute top-20 left-10 opacity-60">
-        {constellationPoints.map((point, i) => (
-          <ConstellationPoint key={i} {...point} delay={i * 0.1 + 2} />
-        ))}
-        {/* Constellation lines */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30" style={{ width: 200, height: 150 }}>
-          <motion.path
-            d="M 30 40 L 36 50 L 44 44 L 34 60 L 50 56 L 60 50 L 40 70 L 56 66 L 70 60"
-            stroke="rgba(255, 215, 0, 0.5)"
-            strokeWidth="0.5"
-            fill="none"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 3, delay: 2 }}
-          />
-        </svg>
-      </div>
+      {/* Constellation in top-left - skip on mobile */}
+      {!isMobile && !prefersReducedMotion && (
+        <div className="absolute top-20 left-10 opacity-60">
+          {constellationPoints.map((point, i) => (
+            <ConstellationPoint key={i} {...point} delay={i * 0.1 + 2} />
+          ))}
+          {/* Constellation lines */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30" style={{ width: 200, height: 150 }}>
+            <motion.path
+              d="M 30 40 L 36 50 L 44 44 L 34 60 L 50 56 L 60 50 L 40 70 L 56 66 L 70 60"
+              stroke="rgba(255, 215, 0, 0.5)"
+              strokeWidth="0.5"
+              fill="none"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 3, delay: 2 }}
+            />
+          </svg>
+        </div>
+      )}
 
       {/* Twinkling stars */}
       {stars.map((star, i) => (

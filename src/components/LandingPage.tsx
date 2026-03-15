@@ -6,11 +6,14 @@ import ThemePreview from '@/components/ThemePreview';
 import HowItWorks from '@/components/HowItWorks';
 import WishCreator from '@/components/WishCreator';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
 export default function LandingPage() {
   const [showCreator, setShowCreator] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<string | undefined>(undefined);
   const creatorRef = useRef<HTMLDivElement>(null);
+  const { isMobile, isLowEnd } = useDeviceCapabilities();
+  const prefersReducedMotion = useReducedMotion();
 
   const handleCreateWish = () => {
     setShowCreator(true);
@@ -48,40 +51,46 @@ export default function LandingPage() {
           }}
         />
         
-        {/* Ambient glow effects */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-[300px] h-[300px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 60%)',
-            filter: 'blur(40px)',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/3 right-1/4 w-[250px] h-[250px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(218, 165, 32, 0.05) 0%, transparent 60%)',
-            filter: 'blur(30px)',
-          }}
-          animate={{
-            scale: [1.1, 1, 1.1],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 2,
-          }}
-        />
+        {/* Ambient glow effects - skip on mobile for performance */}
+        {!isMobile && !isLowEnd && !prefersReducedMotion && (
+          <>
+            <motion.div
+              className="absolute top-1/4 left-1/4 w-[300px] h-[300px] rounded-full"
+              style={{
+                background: 'radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 60%)',
+                filter: 'blur(40px)',
+                willChange: 'transform, opacity',
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+            <motion.div
+              className="absolute bottom-1/3 right-1/4 w-[250px] h-[250px] rounded-full"
+              style={{
+                background: 'radial-gradient(circle, rgba(218, 165, 32, 0.05) 0%, transparent 60%)',
+                filter: 'blur(30px)',
+                willChange: 'transform, opacity',
+              }}
+              animate={{
+                scale: [1.1, 1, 1.1],
+                opacity: [0.2, 0.4, 0.2],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 2,
+              }}
+            />
+          </>
+        )}
       </div>
 
       {/* Hero Section */}
@@ -122,23 +131,25 @@ export default function LandingPage() {
               }}
             />
             
-            {/* Decorative elements */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <motion.div
-                className="absolute top-10 left-10 text-5xl opacity-5"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-              >
-                ✦
-              </motion.div>
-              <motion.div
-                className="absolute bottom-10 right-10 text-6xl opacity-5"
-                animate={{ rotate: [360, 0] }}
-                transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
-              >
-                ✦
-              </motion.div>
-            </div>
+            {/* Decorative elements - skip on mobile */}
+            {!isMobile && !prefersReducedMotion && (
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <motion.div
+                  className="absolute top-10 left-10 text-5xl opacity-5"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+                >
+                  ✦
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-10 right-10 text-6xl opacity-5"
+                  animate={{ rotate: [360, 0] }}
+                  transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
+                >
+                  ✦
+                </motion.div>
+              </div>
+            )}
 
             <div className="relative z-10 max-w-2xl mx-auto">
               <motion.div
