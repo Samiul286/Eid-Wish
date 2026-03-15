@@ -63,7 +63,7 @@ function GlowingText({ children, className = '', delay = 0 }: { children: React.
       className={`relative ${className}`}
       initial={{ opacity: 0 }}
       style={{ willChange: 'transform, opacity' }}
-      animate={{ 
+      animate={{
         opacity: 1,
       }}
       transition={{ duration: 1.2, delay, ease: 'easeOut' }}
@@ -76,7 +76,7 @@ function GlowingText({ children, className = '', delay = 0 }: { children: React.
 // Letter reveal animation
 function LetterReveal({ text, delay = 0, className = '' }: { text: string; delay?: number; className?: string }) {
   const letters = text.split('');
-  
+
   return (
     <div className={`flex flex-wrap justify-center ${className}`}>
       {letters.map((letter, i) => (
@@ -215,25 +215,25 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                   className="absolute inset-0 bg-gradient-to-br from-rose-400 via-pink-500 to-fuchsia-500 rounded-lg shadow-2xl"
                   style={{ transformStyle: 'preserve-3d' }}
                 />
-                
+
                 {/* Envelope flap */}
                 <motion.div
                   className="absolute top-0 left-0 right-0 h-1/2 origin-top"
-                  style={{ 
+                  style={{
                     transformStyle: 'preserve-3d',
                     transform: 'rotateX(0deg)',
                   }}
                   animate={envelopeOpen ? { rotateX: 180 } : { rotateX: 0 }}
                   transition={{ duration: 1, ease: 'easeInOut' }}
                 >
-                  <div 
+                  <div
                     className="w-full h-full bg-gradient-to-b from-rose-300 to-pink-400"
                     style={{
                       clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
                       backfaceVisibility: 'hidden',
                     }}
                   />
-                  <div 
+                  <div
                     className="absolute inset-0 bg-gradient-to-b from-pink-500 to-rose-600"
                     style={{
                       clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
@@ -242,7 +242,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                     }}
                   />
                 </motion.div>
-                
+
                 {/* Heart seal */}
                 {!envelopeOpen && (
                   <motion.div
@@ -256,19 +256,19 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                     </div>
                   </motion.div>
                 )}
-                
-                {/* Clip window — covers the envelope pocket so the card is hidden inside until it rises */}
+
+                {/* Clip pocket — uses inset-0 for reliable explicit bounds matching the envelope body */}
                 {envelopeOpen && (
                   <div
-                    className="absolute inset-x-4 bottom-0"
-                    style={{ height: '100%', overflow: 'hidden', pointerEvents: 'none' }}
+                    className="absolute inset-0"
+                    style={{ overflow: 'hidden', pointerEvents: 'none', zIndex: 2 }}
                   >
-                    {/* Letter rising out of the envelope */}
+                    {/* Letter card: starts fully below clip boundary (y:100% of card height), rises above */}
                     <motion.div
-                      className="absolute inset-x-0 bottom-0 bg-white rounded-lg shadow-lg overflow-hidden"
-                      style={{ height: '85%' }}
+                      className="absolute left-4 right-4 bg-white rounded-lg shadow-xl overflow-hidden"
+                      style={{ top: '15%', bottom: 0 }}
                       initial={{ y: '100%' }}
-                      animate={{ y: '-55%' }}
+                      animate={{ y: '-65%' }}
                       transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
                     >
                       <div className="p-4 text-center">
@@ -280,7 +280,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                 )}
               </div>
             </motion.div>
-            
+
             {/* Floating hearts around envelope */}
             {phase >= 1 && entranceHearts.map((heart, i) => (
               <EntranceHeart key={i} {...heart} />
@@ -323,9 +323,9 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                 >
                   <Heart className="w-8 h-8 text-rose-300 fill-rose-300" />
                 </motion.div>
-                
+
                 {/* Main letter card */}
-                <div 
+                <div
                   className="relative bg-gradient-to-br from-white via-rose-50 to-pink-50 rounded-3xl shadow-2xl overflow-hidden"
                   style={{
                     boxShadow: '0 25px 80px -20px rgba(225, 29, 99, 0.4)',
@@ -333,15 +333,15 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                 >
                   {/* Decorative top border */}
                   <div className="h-2 bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400" />
-                  
+
                   {/* Watermark pattern */}
-                  <div 
+                  <div
                     className="absolute inset-0 opacity-[0.03]"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 5 L22 15 L32 17 L22 19 L20 29 L18 19 L8 17 L18 15 Z' fill='%23e91e63'/%3E%3C/svg%3E")`,
                     }}
                   />
-                  
+
                   <div className="relative p-8 md:p-12">
                     {/* Greeting Header */}
                     <div className="text-center mb-8">
@@ -352,7 +352,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                           <Sparkles className="w-4 h-4" />
                         </div>
                       </GlowingText>
-                      
+
                       <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -363,8 +363,8 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                             Dear
                           </span>
                         </h1>
-                        <LetterReveal 
-                          text={receiverName} 
+                        <LetterReveal
+                          text={receiverName}
                           delay={0.8}
                           className="text-4xl md:text-6xl font-bold"
                         >
@@ -379,7 +379,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                         </motion.span>
                       </motion.div>
                     </div>
-                    
+
                     {/* Decorative divider */}
                     <motion.div
                       className="flex items-center justify-center gap-4 my-6"
@@ -391,7 +391,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                       <Heart className="w-5 h-5 text-rose-400 fill-rose-400" />
                       <div className="h-px w-16 bg-gradient-to-l from-transparent to-rose-300" />
                     </motion.div>
-                    
+
                     {/* Message */}
                     <motion.div
                       className="relative mb-8"
@@ -405,7 +405,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                       </p>
                       <div className="absolute -right-2 bottom-0 text-6xl text-rose-200 font-serif">"</div>
                     </motion.div>
-                    
+
                     {/* Decorative divider */}
                     <motion.div
                       className="flex items-center justify-center gap-4 my-6"
@@ -419,7 +419,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                       <Sparkles className="w-4 h-4 text-pink-400" />
                       <div className="h-px w-12 bg-gradient-to-l from-transparent to-rose-300" />
                     </motion.div>
-                    
+
                     {/* From section */}
                     <motion.div
                       className="text-center"
@@ -440,7 +440,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                         {[...Array(3)].map((_, i) => (
                           <motion.div
                             key={i}
-                            animate={{ 
+                            animate={{
                               scale: [1, 1.2, 1],
                             }}
                             transition={{
@@ -454,7 +454,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                         ))}
                       </motion.div>
                     </motion.div>
-                    
+
                     {/* View counter */}
                     <motion.div
                       className="flex items-center justify-center gap-2 text-gray-400 mt-8"
@@ -467,7 +467,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                     </motion.div>
                   </div>
                 </div>
-                
+
                 {/* Bottom decorative hearts */}
                 <motion.div
                   className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-2"
@@ -480,7 +480,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                   <Heart className="w-5 h-5 text-pink-300 fill-pink-300" />
                 </motion.div>
               </div>
-              
+
               {/* Share buttons */}
               <motion.div
                 className="mt-10"
@@ -495,7 +495,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                   theme="love"
                 />
               </motion.div>
-              
+
               {/* Create own wish */}
               <motion.div
                 className="mt-8 text-center"
