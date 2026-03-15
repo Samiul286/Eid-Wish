@@ -220,7 +220,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                 {/* 1. Envelope Back */}
                 <div 
                   className="absolute inset-0 rounded-b-sm"
-                  style={{ background: '#C8D0DB' }} /* darken($gg, 15%) */
+                  style={{ background: '#b31217' }} /* Darkest red */
                 />
 
                 {/* 2. The Letter / Card (.content) */}
@@ -246,15 +246,15 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                 <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 20 }}>
                   <div 
                     className="absolute inset-0"
-                    style={{ background: '#EFF1F4', clipPath: 'polygon(0 0, 50% 50%, 0 100%)' }}
+                    style={{ background: '#ff4d4f', clipPath: 'polygon(0 0, 50% 50%, 0 100%)' }}
                   />
                   <div 
                     className="absolute inset-0"
-                    style={{ background: '#EFF1F4', clipPath: 'polygon(100% 0, 100% 100%, 50% 50%)' }}
+                    style={{ background: '#ff4d4f', clipPath: 'polygon(100% 0, 100% 100%, 50% 50%)' }}
                   />
                   <div 
                     className="absolute inset-0"
-                    style={{ background: '#E2E6EC', clipPath: 'polygon(0 100%, 50% 50%, 100% 100%)' }}
+                    style={{ background: '#e63946', clipPath: 'polygon(0 100%, 50% 50%, 100% 100%)' }}
                   />
                 </div>
 
@@ -280,7 +280,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                   <div 
                     className="absolute inset-0"
                     style={{
-                      background: '#D5DBE4', /* darken($gg, 10%) */
+                      background: '#e63946', /* Mid-dark red */
                       clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
                       backfaceVisibility: 'hidden',
                     }}
@@ -289,7 +289,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                   <div 
                     className="absolute inset-0"
                     style={{
-                      background: '#C8D0DB',
+                      background: '#b31217', /* Darkest red */
                       clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
                       transform: 'rotateX(180deg)',
                       backfaceVisibility: 'hidden',
@@ -308,8 +308,8 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                       exit={{ scale: 0, opacity: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="w-14 h-14 md:w-16 md:h-16 bg-[#F44336] rounded-full flex items-center justify-center shadow-lg border-2 border-white/20">
-                        <Heart className="w-6 h-6 md:w-8 md:h-8 text-white fill-white" />
+                      <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-rose-200">
+                        <Heart className="w-6 h-6 md:w-8 md:h-8 text-rose-500 fill-rose-500" />
                       </div>
                     </motion.div>
                   )}
