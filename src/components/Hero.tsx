@@ -202,7 +202,7 @@ export default function Hero({ onCreateWish }: HeroProps) {
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-widest uppercase glass-emerald text-emerald-300 animate-border-glow">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            Eid Mubarak 2025
+            Eid Mubarak 2026
           </span>
         </motion.div>
 
