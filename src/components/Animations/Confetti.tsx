@@ -20,7 +20,7 @@ export default function Confetti() {
   useEffect(() => {
     const generatePieces = () => {
       const newPieces: ConfettiPiece[] = [];
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 30; i++) {
         newPieces.push({
           id: i,
           x: Math.random() * 100,
@@ -50,6 +50,7 @@ export default function Confetti() {
               height: piece.size * 0.6,
               backgroundColor: piece.color,
               borderRadius: 2,
+              willChange: 'transform, opacity'
             }}
             initial={{ y: 0, rotate: 0, opacity: 1 }}
             animate={{

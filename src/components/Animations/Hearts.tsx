@@ -14,7 +14,7 @@ function Heart({ delay, x, size, duration }: HeartProps) {
   return (
     <motion.div
       className="absolute"
-      style={{ left: `${x}%`, bottom: -50 }}
+      style={{ left: `${x}%`, bottom: -50, willChange: 'transform, opacity' }}
       initial={{ y: 0, opacity: 0, scale: 0.5 }}
       animate={{
         y: '-100vh',

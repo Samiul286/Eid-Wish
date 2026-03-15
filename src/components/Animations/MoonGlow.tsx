@@ -19,6 +19,7 @@ export default function MoonGlow({ size = 120, className = '' }: MoonGlowProps) 
           left: -size / 2,
           top: -size / 2,
           background: 'radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%)',
+          willChange: 'transform, opacity'
         }}
         animate={{
           scale: [1, 1.2, 1],
@@ -40,6 +41,7 @@ export default function MoonGlow({ size = 120, className = '' }: MoonGlowProps) 
           left: -size / 4,
           top: -size / 4,
           background: 'radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 60%)',
+          willChange: 'transform, opacity'
         }}
         animate={{
           scale: [1, 1.1, 1],
@@ -58,6 +60,7 @@ export default function MoonGlow({ size = 120, className = '' }: MoonGlowProps) 
         style={{
           width: size,
           height: size,
+          willChange: 'transform, opacity'
         }}
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}

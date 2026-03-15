@@ -37,7 +37,7 @@ function EntranceHeart({ delay, x }: { delay: number; x: number }) {
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{ left: `${x}%`, top: '50%' }}
+      style={{ left: `${x}%`, top: '50%', willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scale: 0, y: 0 }}
       animate={{
         opacity: [0, 1, 1, 0],
@@ -61,10 +61,10 @@ function GlowingText({ children, className = '', delay = 0 }: { children: React.
   return (
     <motion.div
       className={`relative ${className}`}
-      initial={{ opacity: 0, filter: 'blur(10px)' }}
+      initial={{ opacity: 0 }}
+      style={{ willChange: 'transform, opacity' }}
       animate={{ 
-        opacity: 1, 
-        filter: 'blur(0px)',
+        opacity: 1,
       }}
       transition={{ duration: 1.2, delay, ease: 'easeOut' }}
     >
@@ -89,7 +89,7 @@ function LetterReveal({ text, delay = 0, className = '' }: { text: string; delay
             delay: delay + i * 0.05,
             ease: [0.215, 0.61, 0.355, 1],
           }}
-          style={{ display: 'inline-block', transformOrigin: 'center bottom' }}
+          style={{ display: 'inline-block', transformOrigin: 'center bottom', willChange: 'transform, opacity' }}
         >
           {letter === ' ' ? '\u00A0' : letter}
         </motion.span>
@@ -112,7 +112,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
   });
 
   const entranceHearts = useMemo(() => {
-    return Array.from({ length: 8 }, (_, i) => ({
+    return Array.from({ length: 4 }, (_, i) => ({
       delay: i * 0.15,
       x: seededRandom(i * 7) * 80 + 10,
     }));

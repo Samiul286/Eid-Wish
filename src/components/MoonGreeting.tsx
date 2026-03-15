@@ -37,6 +37,7 @@ function OrnamentLine({ delay = 0 }: { delay?: number }) {
   return (
     <motion.div
       className="flex items-center justify-center gap-3"
+      style={{ willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scaleX: 0 }}
       animate={{ opacity: 1, scaleX: 1 }}
       transition={{ duration: 1, delay }}
@@ -55,6 +56,7 @@ function FloatingMoon({ delay }: { delay: number }) {
   return (
     <motion.div
       className="absolute pointer-events-none"
+      style={{ left: `${seededRandom(delay * 7) * 80 + 10}%`, top: '10%', willChange: 'transform, opacity' }}
       initial={{ opacity: 0, y: -100, scale: 0.3 }}
       animate={{ 
         opacity: [0, 1, 1, 0],
@@ -67,7 +69,6 @@ function FloatingMoon({ delay }: { delay: number }) {
         delay,
         ease: 'easeOut',
       }}
-      style={{ left: `${seededRandom(delay * 7) * 80 + 10}%`, top: '10%' }}
     >
       <Moon className="w-16 h-16 text-yellow-400 fill-yellow-400/30" />
     </motion.div>
@@ -84,6 +85,7 @@ function GlowingReveal({ text, delay = 0, className = '' }: { text: string; dela
         <motion.span
           key={wordIndex}
           className="inline-block"
+          style={{ willChange: 'transform, opacity' }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -109,6 +111,7 @@ function CharReveal({ text, delay = 0, className = '' }: { text: string; delay?:
         <motion.span
           key={i}
           className="inline-block"
+          style={{ transformOrigin: 'center bottom', willChange: 'transform, opacity' }}
           initial={{ opacity: 0, y: 30, rotateY: 90 }}
           animate={{ opacity: 1, y: 0, rotateY: 0 }}
           transition={{
@@ -116,7 +119,6 @@ function CharReveal({ text, delay = 0, className = '' }: { text: string; delay?:
             delay: delay + i * 0.04,
             ease: 'easeOut',
           }}
-          style={{ transformOrigin: 'center bottom' }}
         >
           {char === ' ' ? '\u00A0' : char}
         </motion.span>
@@ -137,6 +139,7 @@ function IslamicCorner({ position }: { position: 'tl' | 'tr' | 'bl' | 'br' }) {
   return (
     <motion.div
       className={`absolute w-16 h-16 md:w-20 md:h-20 ${positionClasses[position]}`}
+      style={{ willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.5, type: 'spring' }}
@@ -170,7 +173,7 @@ export default function MoonGreeting({ receiverName, senderName, message }: Moon
   });
 
   const floatingMoons = useMemo(() => {
-    return Array.from({ length: 5 }, (_, i) => ({ delay: i * 0.3 }));
+    return Array.from({ length: 3 }, (_, i) => ({ delay: i * 0.3 }));
   }, []);
 
   useEffect(() => {

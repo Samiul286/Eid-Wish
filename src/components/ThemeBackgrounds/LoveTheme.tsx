@@ -39,6 +39,7 @@ function RosePetal({ seed }: { seed: number }) {
         top: -50,
         width: size,
         height: size * 1.3,
+        willChange: 'transform, opacity'
       }}
       initial={{ 
         y: 0, 
@@ -63,7 +64,6 @@ function RosePetal({ seed }: { seed: number }) {
       <svg 
         viewBox="0 0 30 40" 
         fill={petalColors[colorVariant]}
-        style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
       >
         <path d="M15 0 C5 8 0 20 0 28 C0 36 7 40 15 40 C23 40 30 36 30 28 C30 20 25 8 15 0 Z" />
       </svg>
@@ -87,7 +87,7 @@ function GlowingOrb({ seed, index }: { seed: number; index: number }) {
         width: size,
         height: size,
         background: `radial-gradient(circle, hsla(${hue}, 80%, 70%, 0.25) 0%, hsla(${hue}, 80%, 60%, 0.1) 40%, transparent 70%)`,
-        filter: 'blur(20px)',
+        willChange: 'transform, opacity'
       }}
       animate={{
         scale: [1, 1.3, 1],
@@ -119,6 +119,7 @@ function Sparkle({ seed }: { seed: number }) {
         left: `${left}%`,
         width: size,
         height: size,
+        willChange: 'transform, opacity'
       }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{
@@ -157,6 +158,7 @@ function FloatingHeart({ seed }: { seed: number }) {
         bottom: -50,
         width: size,
         height: size,
+        willChange: 'transform, opacity'
       }}
       initial={{ y: 0, opacity: 0 }}
       animate={{
@@ -175,7 +177,6 @@ function FloatingHeart({ seed }: { seed: number }) {
       <svg 
         viewBox="0 0 24 24" 
         fill={`hsla(${hue}, 90%, 65%, 0.7)`}
-        style={{ filter: 'drop-shadow(0 2px 6px rgba(255, 100, 150, 0.3))' }}
       >
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
       </svg>
@@ -195,7 +196,7 @@ function SilkRibbon({ index }: { index: number }) {
         top: `${top}%`,
         height: 2,
         background: `linear-gradient(90deg, transparent 0%, hsla(${hue}, 70%, 70%, 0.3) 20%, hsla(${hue}, 70%, 80%, 0.5) 50%, hsla(${hue}, 70%, 70%, 0.3) 80%, transparent 100%)`,
-        filter: 'blur(1px)',
+        willChange: 'transform, opacity'
       }}
       animate={{
         x: ['-50%', '50%', '-50%'],
@@ -214,19 +215,19 @@ function SilkRibbon({ index }: { index: number }) {
 
 export default function LoveTheme({ children }: LoveThemeProps) {
   const petals = useMemo(() => {
-    return Array.from({ length: 18 }, (_, i) => ({ seed: i * 17 }));
+    return Array.from({ length: 12 }, (_, i) => ({ seed: i * 17 }));
   }, []);
   
   const orbs = useMemo(() => {
-    return Array.from({ length: 5 }, (_, i) => ({ seed: i * 23, index: i }));
+    return Array.from({ length: 3 }, (_, i) => ({ seed: i * 23, index: i }));
   }, []);
   
   const sparkles = useMemo(() => {
-    return Array.from({ length: 25 }, (_, i) => ({ seed: i * 31 }));
+    return Array.from({ length: 15 }, (_, i) => ({ seed: i * 31 }));
   }, []);
   
   const hearts = useMemo(() => {
-    return Array.from({ length: 12 }, (_, i) => ({ seed: i * 37 }));
+    return Array.from({ length: 8 }, (_, i) => ({ seed: i * 37 }));
   }, []);
   
   const ribbons = useMemo(() => {
@@ -296,7 +297,7 @@ export default function LoveTheme({ children }: LoveThemeProps) {
           width: 500,
           height: 500,
           background: 'radial-gradient(ellipse at center, rgba(255, 150, 180, 0.2) 0%, rgba(200, 100, 150, 0.1) 30%, transparent 60%)',
-          filter: 'blur(40px)',
+          willChange: 'transform, opacity'
         }}
         animate={{
           scale: [1, 1.2, 1],

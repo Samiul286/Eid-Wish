@@ -37,19 +37,20 @@ function NeonGlow({ children, color = '#ff00ff', delay = 0 }: { children: React.
   return (
     <motion.div
       className="relative inline-block"
-      initial={{ opacity: 0, filter: 'brightness(0.5)' }}
+      className="relative inline-block"
+      style={{
+        textShadow: `0 0 10px ${color}, 0 0 20px ${color}`,
+        willChange: 'transform, opacity'
+      }}
+      initial={{ opacity: 0 }}
       animate={{ 
-        opacity: 1, 
-        filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)'],
+        opacity: [0.5, 1, 0.5],
       }}
       transition={{ 
         duration: 2, 
         delay,
         repeat: Infinity,
         ease: 'easeInOut',
-      }}
-      style={{
-        textShadow: `0 0 10px ${color}, 0 0 20px ${color}, 0 0 40px ${color}`,
       }}
     >
       {children}
@@ -62,6 +63,7 @@ function SparkleDivider({ delay = 0 }: { delay?: number }) {
   return (
     <motion.div
       className="flex items-center justify-center gap-2 my-4"
+      style={{ willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay, type: 'spring' }}
@@ -114,6 +116,7 @@ function ExplosiveReveal({ text, delay = 0, className = '' }: { text: string; de
           <motion.span
             key={i}
             className="inline-block"
+            style={{ willChange: 'transform, opacity' }}
             initial={{ 
               opacity: 0, 
               x, 
@@ -152,6 +155,7 @@ function WaveReveal({ text, delay = 0, className = '' }: { text: string; delay?:
         <motion.span
           key={wordIndex}
           className="inline-block"
+          style={{ transformOrigin: 'center bottom', willChange: 'transform, opacity' }}
           initial={{ opacity: 0, y: 50, rotateX: -90 }}
           animate={{ opacity: 1, y: 0, rotateX: 0 }}
           transition={{
@@ -159,7 +163,6 @@ function WaveReveal({ text, delay = 0, className = '' }: { text: string; delay?:
             delay: delay + wordIndex * 0.15,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          style={{ transformOrigin: 'center bottom' }}
         >
           {word}
         </motion.span>
@@ -173,6 +176,14 @@ function RainbowShimmer({ children, delay = 0 }: { children: React.ReactNode; de
   return (
     <motion.div
       className="relative inline-block"
+      style={{
+        background: 'linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0, #ff0080)',
+        backgroundSize: '300% 100%',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        willChange: 'background-position, opacity'
+      }}
       initial={{ opacity: 0, backgroundPosition: '0% 50%' }}
       animate={{ 
         opacity: 1,
@@ -184,13 +195,6 @@ function RainbowShimmer({ children, delay = 0 }: { children: React.ReactNode; de
         repeat: Infinity,
         ease: 'linear',
       }}
-      style={{
-        background: 'linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0, #ff0080)',
-        backgroundSize: '300% 100%',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
-      }}
     >
       {children}
     </motion.div>
@@ -200,8 +204,8 @@ function RainbowShimmer({ children, delay = 0 }: { children: React.ReactNode; de
 // Particle burst for entrance
 function ParticleBurst({ x, y, delay }: { x: number; y: number; delay: number }) {
   const particles = useMemo(() => {
-    return Array.from({ length: 12 }, (_, i) => ({
-      angle: (i / 12) * 360,
+    return Array.from({ length: 6 }, (_, i) => ({
+      angle: (i / 6) * 360,
       color: ['#ff0080', '#ff8c00', '#40e0d0', '#ff00ff', '#00ff00', '#ffff00'][i % 6],
     }));
   }, []);
@@ -209,7 +213,7 @@ function ParticleBurst({ x, y, delay }: { x: number; y: number; delay: number })
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{ left: `${x}%`, top: `${y}%` }}
+      style={{ left: `${x}%`, top: `${y}%`, willChange: 'transform, opacity' }}
       initial={{ opacity: 0 }}
       animate={{ opacity: [0, 1, 0] }}
       transition={{ duration: 1.5, delay, repeat: Infinity, repeatDelay: 3 }}
@@ -250,7 +254,7 @@ function PulsingStar({ x, y, delay }: { x: number; y: number; delay: number }) {
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{ left: `${x}%`, top: `${y}%` }}
+      style={{ left: `${x}%`, top: `${y}%`, willChange: 'transform, opacity' }}
       animate={{
         scale: [0.5, 1.2, 0.5],
         rotate: [0, 180, 360],
@@ -280,7 +284,7 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
   });
 
   const particleBursts = useMemo(() => {
-    return Array.from({ length: 6 }, (_, i) => ({
+    return Array.from({ length: 3 }, (_, i) => ({
       x: seededRandom(i * 7) * 80 + 10,
       y: seededRandom(i * 7 + 1) * 60 + 20,
       delay: i * 0.5,
@@ -288,7 +292,7 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
   }, []);
 
   const pulsingStars = useMemo(() => {
-    return Array.from({ length: 8 }, (_, i) => ({
+    return Array.from({ length: 4 }, (_, i) => ({
       x: seededRandom(i * 11) * 90 + 5,
       y: seededRandom(i * 11 + 1) * 70 + 15,
       delay: seededRandom(i * 11 + 2) * 2,

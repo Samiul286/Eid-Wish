@@ -13,7 +13,7 @@ function Lantern({ delay, x, size, color }: LanternProps) {
   return (
     <motion.div
       className="absolute"
-      style={{ left: `${x}%`, top: '10%' }}
+      style={{ left: `${x}%`, top: '10%', willChange: 'transform, opacity' }}
       initial={{ y: 0, opacity: 0 }}
       animate={{
         y: [0, 20, 0, -20, 0],
@@ -77,7 +77,7 @@ function Lantern({ delay, x, size, color }: LanternProps) {
           left: size * 0.1,
           top: size * 0.3,
           background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
-          filter: 'blur(10px)',
+          willChange: 'transform, opacity'
         }}
         animate={{
           opacity: [0.5, 1, 0.5],

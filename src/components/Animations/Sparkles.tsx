@@ -17,7 +17,7 @@ export default function Sparkles() {
   useEffect(() => {
     const generateSparkles = () => {
       const newSparkles: Sparkle[] = [];
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < 20; i++) {
         newSparkles.push({
           id: i,
           x: Math.random() * 100,
@@ -42,6 +42,7 @@ export default function Sparkles() {
             style={{
               left: `${sparkle.x}%`,
               top: `${sparkle.y}%`,
+              willChange: 'transform, opacity'
             }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{

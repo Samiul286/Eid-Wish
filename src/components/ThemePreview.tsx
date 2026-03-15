@@ -23,7 +23,7 @@ function ThemeParticle({ delay }: { delay: number }) {
       className="absolute w-1 h-1 rounded-full pointer-events-none"
       style={{
         background: 'rgba(255, 215, 0, 0.6)',
-        boxShadow: '0 0 4px rgba(255, 215, 0, 0.4)',
+        willChange: 'transform, opacity'
       }}
       initial={{ y: 0, opacity: 0 }}
       animate={{
@@ -75,7 +75,7 @@ export default function ThemePreview({ onSelectTheme, selectedTheme }: ThemePrev
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full pointer-events-none"
         style={{
           background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.05) 0%, transparent 60%)',
-          filter: 'blur(60px)',
+          willChange: 'transform, opacity'
         }}
         animate={{
           scale: [1, 1.2, 1],

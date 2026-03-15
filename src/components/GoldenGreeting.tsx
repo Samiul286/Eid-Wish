@@ -37,6 +37,7 @@ function RoyalOrnament({ delay = 0 }: { delay?: number }) {
   return (
     <motion.div
       className="flex items-center justify-center gap-3 my-4"
+      style={{ willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scaleX: 0 }}
       animate={{ opacity: 1, scaleX: 1 }}
       transition={{ duration: 1, delay }}
@@ -107,7 +108,7 @@ function LuxuryReveal({ text, delay = 0, className = '' }: { text: string; delay
             delay: delay + i * 0.04,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          style={{ transformOrigin: 'center bottom' }}
+          style={{ transformOrigin: 'center bottom', willChange: 'transform, opacity' }}
         >
           {letter === ' ' ? '\u00A0' : letter}
         </motion.span>
@@ -138,6 +139,7 @@ function GoldShimmerText({ children, delay = 0 }: { children: React.ReactNode; d
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         backgroundClip: 'text',
+        willChange: 'background-position'
       }}
     >
       {children}
@@ -150,7 +152,7 @@ function FloatingDiamond({ x, y, delay }: { x: number; y: number; delay: number 
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{ left: `${x}%`, top: `${y}%` }}
+      style={{ left: `${x}%`, top: `${y}%`, willChange: 'transform, opacity' }}
       animate={{
         y: [0, -15, 0],
         rotate: [0, 45, 0],
@@ -195,7 +197,7 @@ function CrownEntrance({ delay }: { delay: number }) {
         delay,
         ease: 'easeOut',
       }}
-      style={{ left: '50%', top: '30%', transform: 'translateX(-50%)' }}
+      style={{ left: '50%', top: '30%', transform: 'translateX(-50%)', willChange: 'transform, opacity' }}
     >
       <Crown className="w-16 h-16 text-amber-400 fill-amber-400/30" />
     </motion.div>
@@ -218,7 +220,7 @@ function GoldTrail({ delay }: { delay: number }) {
         repeat: Infinity,
         ease: 'linear',
       }}
-      style={{ top: `${30 + delay * 10}%`, left: 0, width: '100%' }}
+      style={{ top: `${30 + delay * 10}%`, left: 0, width: '100%', willChange: 'transform, opacity' }}
     >
       <div
         className="h-px w-1/3 mx-auto"
@@ -242,7 +244,7 @@ export default function GoldenGreeting({ receiverName, senderName, message }: Go
   });
 
   const floatingDiamonds = useMemo(() => {
-    return Array.from({ length: 8 }, (_, i) => ({
+    return Array.from({ length: 4 }, (_, i) => ({
       x: seededRandom(i * 7) * 80 + 10,
       y: seededRandom(i * 7 + 1) * 60 + 20,
       delay: seededRandom(i * 7 + 2) * 2,
@@ -250,7 +252,7 @@ export default function GoldenGreeting({ receiverName, senderName, message }: Go
   }, []);
 
   const crownEntrances = useMemo(() => {
-    return Array.from({ length: 3 }, (_, i) => ({ delay: i * 1.5 }));
+    return Array.from({ length: 2 }, (_, i) => ({ delay: i * 1.5 }));
   }, []);
 
   const goldTrails = useMemo(() => {
@@ -434,7 +436,7 @@ export default function GoldenGreeting({ receiverName, senderName, message }: Go
                   className="absolute -inset-2 rounded-3xl pointer-events-none"
                   style={{
                     background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(218, 165, 32, 0.1))',
-                    filter: 'blur(20px)',
+                    willChange: 'transform, opacity'
                   }}
                   animate={{
                     opacity: [0.5, 0.8, 0.5],

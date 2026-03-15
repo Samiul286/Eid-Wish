@@ -29,6 +29,7 @@ function EveningStar({ seed }: { seed: number }) {
         width: size,
         height: size,
         background: 'radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 200, 100, 0.5) 50%, transparent 70%)',
+        willChange: 'transform, opacity'
       }}
       animate={{
         opacity: [0.3, 1, 0.3],
@@ -57,6 +58,7 @@ function FloatingLantern({ seed }: { seed: number }) {
       style={{
         left: `${left}%`,
         top: `${top}%`,
+        willChange: 'transform, opacity'
       }}
       initial={{ y: 0, x: 0 }}
       animate={{
@@ -78,7 +80,7 @@ function FloatingLantern({ seed }: { seed: number }) {
           left: -size * 0.25,
           top: -size * 0.25,
           background: `radial-gradient(circle, hsla(${hue}, 100%, 60%, 0.4) 0%, hsla(${hue}, 100%, 50%, 0.1) 50%, transparent 70%)`,
-          filter: 'blur(8px)',
+          willChange: 'transform, opacity'
         }}
         animate={{
           scale: [1, 1.3, 1],
@@ -321,7 +323,7 @@ function MosqueSilhouette() {
 
 export default function MosqueTheme({ children }: MosqueThemeProps) {
   const stars = useMemo(() => {
-    return Array.from({ length: 50 }, (_, i) => ({ seed: i * 5 }));
+    return Array.from({ length: 25 }, (_, i) => ({ seed: i * 5 }));
   }, []);
 
   const lanterns = useMemo(() => {
@@ -377,7 +379,7 @@ export default function MosqueTheme({ children }: MosqueThemeProps) {
           className="w-[400px] h-[200px] rounded-full"
           style={{
             background: 'radial-gradient(ellipse at center bottom, rgba(255, 200, 100, 0.8) 0%, rgba(255, 150, 50, 0.4) 30%, transparent 70%)',
-            filter: 'blur(20px)',
+            willChange: 'transform, opacity'
           }}
         />
       </motion.div>

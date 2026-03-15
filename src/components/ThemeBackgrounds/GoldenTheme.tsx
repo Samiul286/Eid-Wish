@@ -30,7 +30,7 @@ function GoldDust({ seed }: { seed: number }) {
         width: size,
         height: size,
         background: `radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(218, 165, 32, 0.5) 50%, transparent 70%)`,
-        boxShadow: '0 0 4px rgba(255, 215, 0, 0.5)',
+        willChange: 'transform, opacity'
       }}
       animate={{
         y: [0, -30, 0],
@@ -62,6 +62,7 @@ function GoldFlake({ seed }: { seed: number }) {
       style={{
         left: `${left}%`,
         top: -30,
+        willChange: 'transform, opacity'
       }}
       initial={{ y: 0, rotate: 0, opacity: 0 }}
       animate={{
@@ -100,7 +101,7 @@ function CrownJewel({ top, left, delay }: { top: number; left: number; delay: nu
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{ top: `${top}%`, left: `${left}%` }}
+      style={{ top: `${top}%`, left: `${left}%`, willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{
         opacity: [0, 1, 1, 0],
@@ -152,6 +153,7 @@ function LightRay({ index }: { index: number }) {
         height: '40%',
         background: 'linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, transparent 100%)',
         transformOrigin: 'top',
+        willChange: 'transform, opacity'
       }}
       animate={{
         scaleY: [0.5, 1, 0.5],
@@ -204,7 +206,7 @@ function OrnateCorner({ position }: { position: 'tl' | 'tr' | 'bl' | 'br' }) {
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={positionStyles[position]}
+      style={{ ...positionStyles[position], willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.5, duration: 1, ease: 'easeOut' }}
@@ -247,6 +249,7 @@ function GoldenHalo() {
   return (
     <motion.div
       className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+      style={{ willChange: 'transform, opacity' }}
       animate={{
         scale: [1, 1.1, 1],
         opacity: [0.3, 0.5, 0.3],
@@ -271,11 +274,11 @@ function GoldenHalo() {
 
 export default function GoldenTheme({ children }: GoldenThemeProps) {
   const goldDust = useMemo(() => {
-    return Array.from({ length: 50 }, (_, i) => ({ seed: i * 7 }));
+    return Array.from({ length: 25 }, (_, i) => ({ seed: i * 7 }));
   }, []);
 
   const goldFlakes = useMemo(() => {
-    return Array.from({ length: 12 }, (_, i) => ({ seed: i * 11 }));
+    return Array.from({ length: 8 }, (_, i) => ({ seed: i * 11 }));
   }, []);
 
   const crownJewels = useMemo(() => [

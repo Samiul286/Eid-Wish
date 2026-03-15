@@ -32,7 +32,7 @@ export default function Fireworks() {
       const color = colors[Math.floor(Math.random() * colors.length)];
       const particles: Particle[] = [];
 
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 12; i++) {
         particles.push({
           id: i,
           x,
@@ -80,7 +80,7 @@ export default function Fireworks() {
               <motion.div
                 key={particle.id}
                 className="absolute w-2 h-2 rounded-full"
-                style={{ backgroundColor: particle.color }}
+                style={{ backgroundColor: particle.color, willChange: 'transform, opacity' }}
                 initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
                 animate={{
                   x: Math.cos((particle.angle * Math.PI) / 180) * particle.distance,
@@ -97,7 +97,7 @@ export default function Fireworks() {
             {/* Center flash */}
             <motion.div
               className="absolute w-4 h-4 rounded-full bg-white"
-              style={{ left: -8, top: -8 }}
+              style={{ left: -8, top: -8, willChange: 'transform, opacity' }}
               initial={{ opacity: 1, scale: 2 }}
               animate={{ opacity: 0, scale: 0 }}
               transition={{ duration: 0.3 }}

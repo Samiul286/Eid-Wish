@@ -40,7 +40,7 @@ function IslamicArch({ delay = 0 }: { delay?: number }) {
       initial={{ opacity: 0, scaleY: 0 }}
       animate={{ opacity: 1, scaleY: 1 }}
       transition={{ duration: 0.8, delay }}
-      style={{ transformOrigin: 'top' }}
+      style={{ transformOrigin: 'top', willChange: 'transform, opacity' }}
     >
       <svg width="200" height="40" viewBox="0 0 200 40">
         <path
@@ -60,6 +60,7 @@ function GoldenDivider({ delay = 0 }: { delay?: number }) {
   return (
     <motion.div
       className="flex items-center justify-center gap-3 my-4"
+      style={{ willChange: 'transform, opacity' }}
       initial={{ opacity: 0, scaleX: 0 }}
       animate={{ opacity: 1, scaleX: 1 }}
       transition={{ duration: 0.8, delay }}
@@ -78,7 +79,7 @@ function EntranceLantern({ delay, x }: { delay: number; x: number }) {
   return (
     <motion.div
       className="absolute pointer-events-none"
-      style={{ left: `${x}%`, top: '20%' }}
+      style={{ left: `${x}%`, top: '20%', willChange: 'transform, opacity' }}
       initial={{ opacity: 0, y: 50, scale: 0.3 }}
       animate={{
         opacity: [0, 1, 1, 0],
@@ -122,7 +123,7 @@ function WordReveal({ text, delay = 0, className = '' }: { text: string; delay?:
             delay: delay + i * 0.15,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          style={{ transformOrigin: 'center bottom' }}
+          style={{ transformOrigin: 'center bottom', willChange: 'transform, opacity' }}
         >
           {word}
         </motion.span>
@@ -142,6 +143,7 @@ function LetterCascade({ text, delay = 0, className = '' }: { text: string; dela
           key={i}
           className="inline-block"
           initial={{ opacity: 0, y: -50, scale: 1.5 }}
+          style={{ willChange: 'transform, opacity' }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{
             duration: 0.6,
@@ -161,6 +163,7 @@ function SunMoonIcon() {
   return (
     <motion.div
       className="relative"
+      style={{ willChange: 'transform, opacity' }}
       animate={{ rotate: 360 }}
       transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
     >

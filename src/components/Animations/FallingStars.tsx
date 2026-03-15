@@ -18,7 +18,7 @@ export default function FallingStars() {
   useEffect(() => {
     const generateStars = () => {
       const newStars: Star[] = [];
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 15; i++) {
         newStars.push({
           id: i,
           x: Math.random() * 100,
@@ -46,6 +46,7 @@ export default function FallingStars() {
               top: `${star.y}%`,
               width: star.size,
               height: star.size,
+              willChange: 'transform, opacity'
             }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{
