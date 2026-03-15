@@ -122,9 +122,9 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
     const timers = [
       setTimeout(() => setPhase(1), 500),
       setTimeout(() => setPhase(2), 1500),
-      setTimeout(() => setEnvelopeOpen(true), 2500),
-      setTimeout(() => setShowEnvelope(false), 3500),
-      setTimeout(() => setShowContent(true), 4000),
+      setTimeout(() => setEnvelopeOpen(true), 2200),
+      setTimeout(() => setShowEnvelope(false), 4500),
+      setTimeout(() => setShowContent(true), 5000),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -204,38 +204,92 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
             {/* Envelope container */}
             <motion.div
               className="relative"
-              initial={{ y: 100, rotateX: -30 }}
-              animate={{ y: 0, rotateX: 0 }}
+              initial={{ y: 200, scale: 0.8 }}
+              animate={{ y: 0, scale: 1 }}
               transition={{ duration: 1, ease: 'easeOut' }}
             >
-              {/* Envelope body */}
-              <div className="relative w-72 h-48 md:w-96 md:h-56">
-                {/* Envelope back */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-rose-400 via-pink-500 to-fuchsia-500 rounded-lg shadow-2xl"
-                  style={{ transformStyle: 'preserve-3d' }}
+              {/* Envelope body mimicking SCSS styling and z-index layers */}
+              <div 
+                className="relative w-80 h-52 md:w-[32rem] md:h-[20rem] mx-auto shadow-2xl rounded-sm"
+                style={{
+                  perspective: '3000px',
+                  perspectiveOrigin: '50% 0',
+                  transformStyle: 'preserve-3d',
+                }}
+              >
+                {/* 1. Envelope Back */}
+                <div 
+                  className="absolute inset-0 rounded-b-sm"
+                  style={{ background: '#C8D0DB' }} /* darken($gg, 15%) */
                 />
 
-                {/* Envelope flap */}
+                {/* 2. The Letter / Card (.content) */}
                 <motion.div
-                  className="absolute top-0 left-0 right-0 h-1/2 origin-top"
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    transform: 'rotateX(0deg)',
+                  className="absolute left-6 right-6 bg-white rounded-t-lg shadow-xl border-t border-gray-100"
+                  style={{ 
+                    bottom: 0, 
+                    height: '92%', 
+                    zIndex: 10,
                   }}
-                  animate={envelopeOpen ? { rotateX: 180 } : { rotateX: 0 }}
-                  transition={{ duration: 1, ease: 'easeInOut' }}
+                  initial={{ y: 0 }}
+                  // Wait 0.8s for flap to open before sliding out
+                  animate={envelopeOpen ? { y: '-60%' } : { y: 0 }}
+                  transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }} 
                 >
-                  <div
-                    className="w-full h-full bg-gradient-to-b from-rose-300 to-pink-400"
+                  <div className="p-4 md:p-6 text-center h-full flex flex-col pt-10">
+                    <p className="text-[#3B4451] font-bold text-sm md:text-lg mb-2">A special message...</p>
+                    <Heart className="w-8 h-8 text-[#F44336] fill-[#F44336] mx-auto mt-6" />
+                  </div>
+                </motion.div>
+
+                {/* 3. Envelope Front Pockets (.rest equivalents) */}
+                <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 20 }}>
+                  <div 
+                    className="absolute inset-0"
+                    style={{ background: '#EFF1F4', clipPath: 'polygon(0 0, 50% 50%, 0 100%)' }}
+                  />
+                  <div 
+                    className="absolute inset-0"
+                    style={{ background: '#EFF1F4', clipPath: 'polygon(100% 0, 100% 100%, 50% 50%)' }}
+                  />
+                  <div 
+                    className="absolute inset-0"
+                    style={{ background: '#E2E6EC', clipPath: 'polygon(0 100%, 50% 50%, 100% 100%)' }}
+                  />
+                </div>
+
+                {/* 4. Envelope Top Flap (.top) */}
+                <motion.div
+                  className="absolute top-0 left-0 right-0 origin-top"
+                  style={{ 
+                    height: '60%', 
+                    transformStyle: 'preserve-3d',
+                    zIndex: 30,
+                  }}
+                  animate={{ 
+                    rotateX: envelopeOpen ? -180 : 0,
+                    zIndex: envelopeOpen ? 5 : 30 
+                  }}
+                  transition={{ 
+                    rotateX: { duration: 1, ease: 'easeInOut' },
+                    // Snap the z-index halfway through the flip so it visually passes behind the letter 
+                    zIndex: { delay: 0.4 } 
+                  }}
+                >
+                  {/* Flap Outer (Front) */}
+                  <div 
+                    className="absolute inset-0"
                     style={{
+                      background: '#D5DBE4', /* darken($gg, 10%) */
                       clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
                       backfaceVisibility: 'hidden',
                     }}
                   />
-                  <div
-                    className="absolute inset-0 bg-gradient-to-b from-pink-500 to-rose-600"
+                  {/* Flap Inner (Back) */}
+                  <div 
+                    className="absolute inset-0"
                     style={{
+                      background: '#C8D0DB',
                       clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
                       transform: 'rotateX(180deg)',
                       backfaceVisibility: 'hidden',
@@ -243,41 +297,23 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                   />
                 </motion.div>
 
-                {/* Heart seal */}
-                {!envelopeOpen && (
-                  <motion.div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.5, type: 'spring' }}
-                  >
-                    <div className="w-12 h-12 md:w-16 md:h-16 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
-                      <Heart className="w-6 h-6 md:w-8 md:h-8 text-white fill-white" />
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Clip pocket — uses inset-0 for reliable explicit bounds matching the envelope body */}
-                {envelopeOpen && (
-                  <div
-                    className="absolute inset-0"
-                    style={{ overflow: 'hidden', pointerEvents: 'none', zIndex: 2 }}
-                  >
-                    {/* Letter card: starts fully below clip boundary (y:100% of card height), rises above */}
+                {/* Heart Seal */}
+                <AnimatePresence>
+                  {!envelopeOpen && (
                     <motion.div
-                      className="absolute left-4 right-4 bg-white rounded-lg shadow-xl overflow-hidden"
-                      style={{ top: '15%', bottom: 0 }}
-                      initial={{ y: '100%' }}
-                      animate={{ y: '-65%' }}
-                      transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+                      className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2"
+                      style={{ zIndex: 40 }}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <div className="p-4 text-center">
-                        <p className="text-rose-400 font-medium text-sm md:text-base">A special message...</p>
-                        <Heart className="w-6 h-6 text-pink-400 fill-pink-400 mx-auto mt-2" />
+                      <div className="w-14 h-14 md:w-16 md:h-16 bg-[#F44336] rounded-full flex items-center justify-center shadow-lg border-2 border-white/20">
+                        <Heart className="w-6 h-6 md:w-8 md:h-8 text-white fill-white" />
                       </div>
                     </motion.div>
-                  </div>
-                )}
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
 
