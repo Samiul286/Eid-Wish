@@ -6,7 +6,7 @@ import { Eye, Music, Music2, Home, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_MESSAGE, incrementViewCount, generateWishId } from '@/types/wish';
 import MosqueTheme from './ThemeBackgrounds/MosqueTheme';
-import ShareButtons from './ShareButtons';
+
 import Link from 'next/link';
 
 interface MosqueGreetingProps {
@@ -360,7 +360,7 @@ export default function MosqueGreeting({ receiverName, senderName, message }: Mo
       <AnimatePresence>
         {showContent && (
           <motion.div
-            className="min-h-screen flex items-center justify-center px-4 py-20"
+            className="min-h-screen flex items-start justify-center px-3 sm:px-4 pt-16 pb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -413,16 +413,16 @@ export default function MosqueGreeting({ receiverName, senderName, message }: Mo
                   <div className="h-1.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
 
                   {/* Content */}
-                  <div className="p-8 md:p-12">
+                  <div className="p-5 sm:p-8 md:p-10">
                     {/* Arabic greeting */}
                     <motion.div
-                      className="text-center mb-4"
+                      className="text-center mb-3"
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
                     >
                       <h2 
-                        className="text-4xl md:text-5xl font-bold text-amber-300"
+                        className="text-3xl sm:text-4xl md:text-5xl font-bold text-amber-300"
                         style={{ textShadow: '0 0 30px rgba(255, 191, 0, 0.4)' }}
                       >
                         عيد مبارك
@@ -432,7 +432,7 @@ export default function MosqueGreeting({ receiverName, senderName, message }: Mo
                     <IslamicArch delay={0.3} />
 
                     <motion.p
-                      className="text-center text-amber-200/60 tracking-[0.3em] text-sm mt-2"
+                      className="text-center text-amber-200/60 tracking-[0.2em] sm:tracking-[0.3em] text-xs sm:text-sm mt-2"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
@@ -442,16 +442,16 @@ export default function MosqueGreeting({ receiverName, senderName, message }: Mo
 
                     {/* Receiver name */}
                     <motion.div
-                      className="text-center my-8"
+                      className="text-center my-5 sm:my-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.6 }}
                     >
-                      <p className="text-amber-200/50 text-sm tracking-wider mb-3">DEAR BELOVED</p>
+                      <p className="text-amber-200/50 text-xs sm:text-sm tracking-wider mb-3">DEAR BELOVED</p>
                       <LetterCascade
                         text={receiverName}
                         delay={0.8}
-                        className="text-3xl md:text-5xl font-bold text-white"
+                        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white"
                       />
                     </motion.div>
 
@@ -459,13 +459,13 @@ export default function MosqueGreeting({ receiverName, senderName, message }: Mo
 
                     {/* Message */}
                     <motion.div
-                      className="my-8 px-4"
+                      className="my-5 sm:my-8 px-2 sm:px-4"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.4 }}
                     >
-                      <p className="text-lg md:text-xl text-amber-50/90 leading-relaxed text-center font-light italic">
-                        "{message || DEFAULT_MESSAGE}"
+                      <p className="text-base sm:text-lg md:text-xl text-amber-50/90 leading-relaxed text-center font-light italic">
+                        &ldquo;{message || DEFAULT_MESSAGE}&rdquo;
                       </p>
                     </motion.div>
 
@@ -473,38 +473,39 @@ export default function MosqueGreeting({ receiverName, senderName, message }: Mo
 
                     {/* Sender */}
                     <motion.div
-                      className="text-center mt-8"
+                      className="text-center mt-5 sm:mt-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1.8 }}
                     >
-                      <p className="text-amber-200/50 text-sm tracking-wider mb-2">SENT WITH BLESSINGS FROM</p>
+                      <p className="text-amber-200/50 text-xs sm:text-sm tracking-wider mb-2">SENT WITH BLESSINGS FROM</p>
                       <WordReveal
                         text={senderName}
                         delay={2}
-                        className="text-2xl md:text-3xl font-semibold text-amber-300"
+                        className="text-xl sm:text-2xl md:text-3xl font-semibold text-amber-300"
                       />
                     </motion.div>
 
                     {/* Animated sun/moon */}
                     <motion.div
-                      className="flex justify-center mt-8"
+                      className="flex justify-center mt-5 sm:mt-8"
                       animate={{ y: [0, -5, 0] }}
                       transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                      <Moon className="w-8 h-8 text-amber-300/80" />
+                      <Moon className="w-7 h-7 sm:w-8 sm:h-8 text-amber-300/80" />
                     </motion.div>
 
                     {/* View counter */}
                     <motion.div
-                      className="flex items-center justify-center gap-2 text-amber-100/40 mt-6"
+                      className="flex items-center justify-center gap-2 text-amber-100/40 mt-4 sm:mt-6"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 2.2 }}
                     >
                       <Eye className="w-4 h-4" />
-                      <span className="text-sm">{viewCount} people received this blessing</span>
+                      <span className="text-xs sm:text-sm">{viewCount} people received this blessing</span>
                     </motion.div>
+
                   </div>
 
                   {/* Bottom decorative bar */}

@@ -6,7 +6,7 @@ import { Eye, Music, Music2, Home, Sparkles, Zap, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_MESSAGE, incrementViewCount, generateWishId } from '@/types/wish';
 import FireworksTheme from './ThemeBackgrounds/FireworksTheme';
-import ShareButtons from './ShareButtons';
+
 import Link from 'next/link';
 import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
@@ -467,7 +467,7 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
       <AnimatePresence>
         {showContent && (
           <motion.div
-            className="min-h-screen flex items-center justify-center px-4 py-20"
+            className="min-h-screen flex items-start justify-center px-3 sm:px-4 pt-16 pb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -539,16 +539,16 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
                   />
 
                   {/* Content */}
-                  <div className="p-8 md:p-12">
+                  <div className="p-5 sm:p-8 md:p-10">
                     {/* Arabic greeting with glow */}
                     <motion.div
-                      className="text-center mb-4"
+                      className="text-center mb-3"
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
                     >
                       <NeonGlow color="#ff00ff">
-                        <h2 className="text-4xl md:text-5xl font-bold text-fuchsia-300">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-fuchsia-300">
                           عيد مبارك
                         </h2>
                       </NeonGlow>
@@ -563,22 +563,22 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
                       transition={{ delay: 0.4 }}
                     >
                       <RainbowShimmer>
-                        <p className="text-lg font-bold tracking-[0.3em]">EID MUBARAK</p>
+                        <p className="text-base sm:text-lg font-bold tracking-[0.2em] sm:tracking-[0.3em]">EID MUBARAK</p>
                       </RainbowShimmer>
                     </motion.div>
 
                     {/* Receiver name - explosive reveal */}
                     <motion.div
-                      className="text-center my-8"
+                      className="text-center my-5 sm:my-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.6 }}
                     >
-                      <p className="text-cyan-300/60 text-sm tracking-wider mb-3">CELEBRATING WITH</p>
+                      <p className="text-cyan-300/60 text-xs sm:text-sm tracking-wider mb-2 sm:mb-3">CELEBRATING WITH</p>
                       <ExplosiveReveal
                         text={receiverName}
                         delay={0.8}
-                        className="text-3xl md:text-5xl font-bold text-white"
+                        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white"
                       />
                     </motion.div>
 
@@ -586,13 +586,13 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
 
                     {/* Message */}
                     <motion.div
-                      className="my-8 px-4"
+                      className="my-5 sm:my-8 px-2 sm:px-4"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.4 }}
                     >
-                      <p className="text-lg md:text-xl text-white/90 leading-relaxed text-center font-light">
-                        "{message || DEFAULT_MESSAGE}"
+                      <p className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed text-center font-light">
+                        &ldquo;{message || DEFAULT_MESSAGE}&rdquo;
                       </p>
                     </motion.div>
 
@@ -600,20 +600,14 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
 
                     {/* Sender */}
                     <motion.div
-                      className="text-center mt-8"
+                      className="text-center mt-5 sm:mt-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1.8 }}
                     >
-                      <p className="text-fuchsia-300/50 text-sm tracking-wider mb-2">LIGHTING UP THE SKY FOR YOU</p>
-                      <WaveReveal
-                        text={senderName}
-                        delay={2}
-                        className="text-2xl md:text-3xl font-semibold"
-                      >
-                      </WaveReveal>
+                      <p className="text-fuchsia-300/50 text-xs sm:text-sm tracking-wider mb-2">LIGHTING UP THE SKY FOR YOU</p>
                       <motion.span
-                        className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-fuchsia-400 via-cyan-400 to-fuchsia-400 bg-clip-text text-transparent"
+                        className="text-xl sm:text-2xl md:text-3xl font-semibold bg-gradient-to-r from-fuchsia-400 via-cyan-400 to-fuchsia-400 bg-clip-text text-transparent"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 2 }}
@@ -624,26 +618,27 @@ export default function FireworksGreeting({ receiverName, senderName, message }:
 
                     {/* Animated sparkle */}
                     <motion.div
-                      className="flex justify-center mt-8"
+                      className="flex justify-center mt-5 sm:mt-8"
                       animate={{ 
                         y: [0, -8, 0],
                         rotate: [0, 10, -10, 0],
                       }}
                       transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                      <Sparkles className="w-8 h-8 text-yellow-400 fill-yellow-400" />
+                      <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 text-yellow-400 fill-yellow-400" />
                     </motion.div>
 
                     {/* View counter */}
                     <motion.div
-                      className="flex items-center justify-center gap-2 text-white/40 mt-6"
+                      className="flex items-center justify-center gap-2 text-white/40 mt-4 sm:mt-6"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 2.2 }}
                     >
                       <Eye className="w-4 h-4" />
-                      <span className="text-sm">{viewCount} people celebrated this moment</span>
+                      <span className="text-xs sm:text-sm">{viewCount} people celebrated this moment</span>
                     </motion.div>
+
                   </div>
 
                   {/* Bottom neon bar */}

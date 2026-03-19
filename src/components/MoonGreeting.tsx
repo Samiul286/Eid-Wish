@@ -6,7 +6,7 @@ import { Eye, Music, Music2, Home, Moon, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_MESSAGE, incrementViewCount, generateWishId } from '@/types/wish';
 import MoonTheme from './ThemeBackgrounds/MoonTheme';
-import ShareButtons from './ShareButtons';
+
 import Link from 'next/link';
 import { useDeviceCapabilities, useReducedMotion } from '@/hooks/use-reduced-motion';
 
@@ -323,7 +323,7 @@ export default function MoonGreeting({ receiverName, senderName, message }: Moon
       <AnimatePresence>
         {showContent && (
           <motion.div
-            className="min-h-screen flex items-center justify-center px-4 py-16"
+            className="min-h-screen flex items-start justify-center px-3 sm:px-4 pt-16 pb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -361,37 +361,37 @@ export default function MoonGreeting({ receiverName, senderName, message }: Moon
                   <div className="h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent" />
 
                   {/* Content */}
-                  <div className="p-8 md:p-12">
+                  <div className="p-5 sm:p-8 md:p-10">
                     {/* Arabic greeting */}
                     <motion.div
-                      className="text-center mb-6"
+                      className="text-center mb-4"
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
                     >
                       <h2 
-                        className="text-3xl md:text-4xl font-bold text-yellow-400 mb-1"
+                        className="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-400 mb-1"
                         style={{ textShadow: '0 0 20px rgba(255, 215, 0, 0.3)' }}
                       >
                         عيد مبارك
                       </h2>
-                      <p className="text-yellow-200/60 text-sm tracking-[0.3em]">EID MUBARAK</p>
+                      <p className="text-yellow-200/60 text-xs sm:text-sm tracking-[0.2em] sm:tracking-[0.3em]">EID MUBARAK</p>
                     </motion.div>
 
                     <OrnamentLine delay={0.3} />
 
                     {/* Receiver name */}
                     <motion.div
-                      className="text-center my-8"
+                      className="text-center my-5 sm:my-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.5 }}
                     >
-                      <p className="text-yellow-200/60 text-sm mb-2 tracking-wider">DEAR</p>
+                      <p className="text-yellow-200/60 text-xs sm:text-sm mb-2 tracking-wider">DEAR</p>
                       <CharReveal
                         text={receiverName}
                         delay={0.7}
-                        className="text-3xl md:text-5xl font-bold text-white"
+                        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white"
                       />
                     </motion.div>
 
@@ -399,14 +399,14 @@ export default function MoonGreeting({ receiverName, senderName, message }: Moon
 
                     {/* Message */}
                     <motion.div
-                      className="my-8 px-4"
+                      className="my-5 sm:my-8 px-2 sm:px-4"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.4 }}
                     >
                       <div className="relative">
-                        <p className="text-lg md:text-xl text-white/90 leading-relaxed text-center font-light">
-                          "{message || DEFAULT_MESSAGE}"
+                        <p className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed text-center font-light">
+                          &ldquo;{message || DEFAULT_MESSAGE}&rdquo;
                         </p>
                       </div>
                     </motion.div>
@@ -415,45 +415,46 @@ export default function MoonGreeting({ receiverName, senderName, message }: Moon
 
                     {/* Sender */}
                     <motion.div
-                      className="text-center mt-8"
+                      className="text-center mt-5 sm:mt-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1.8 }}
                     >
-                      <p className="text-yellow-200/50 text-sm tracking-wider mb-2">WITH BLESSINGS FROM</p>
+                      <p className="text-yellow-200/50 text-xs sm:text-sm tracking-wider mb-2">WITH BLESSINGS FROM</p>
                       <motion.div
                         className="flex items-center justify-center gap-2"
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 2, type: 'spring' }}
                       >
-                        <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                        <p className="text-2xl md:text-3xl font-semibold text-yellow-400">
+                        <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400" />
+                        <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-yellow-400">
                           {senderName}
                         </p>
-                        <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                        <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400" />
                       </motion.div>
                     </motion.div>
 
                     {/* Animated moon */}
                     <motion.div
-                      className="flex justify-center mt-8"
+                      className="flex justify-center mt-5 sm:mt-8"
                       animate={{ y: [0, -5, 0] }}
                       transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                      <Moon className="w-8 h-8 text-yellow-400 fill-yellow-400/20" />
+                      <Moon className="w-7 h-7 sm:w-8 sm:h-8 text-yellow-400 fill-yellow-400/20" />
                     </motion.div>
 
                     {/* View counter */}
                     <motion.div
-                      className="flex items-center justify-center gap-2 text-white/40 mt-6"
+                      className="flex items-center justify-center gap-2 text-white/40 mt-4 sm:mt-6"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 2.2 }}
                     >
                       <Eye className="w-4 h-4" />
-                      <span className="text-sm">{viewCount} people received this blessing</span>
+                      <span className="text-xs sm:text-sm">{viewCount} people received this blessing</span>
                     </motion.div>
+
                   </div>
 
                   {/* Bottom decorative bar */}

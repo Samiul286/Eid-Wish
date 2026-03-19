@@ -14,6 +14,7 @@ import MoonGreeting from './MoonGreeting';
 import MosqueGreeting from './MosqueGreeting';
 import FireworksGreeting from './FireworksGreeting';
 import LoveGreeting from './LoveGreeting';
+import GoldenGreeting from './GoldenGreeting';
 import Link from 'next/link';
 
 interface GreetingPageProps {
@@ -216,7 +217,7 @@ function StandardGreeting({ receiverName, senderName, message, theme }: Greeting
       <AnimatePresence>
         {showContent && (
           <motion.div
-            className="min-h-screen flex flex-col items-center justify-center px-4 py-20"
+            className="min-h-screen flex flex-col items-start justify-center px-3 sm:px-4 pt-16 pb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -347,7 +348,18 @@ export default function GreetingPage(props: GreetingPageProps) {
       />
     );
   }
+
+  // Render Golden theme with special component
+  if (props.theme === 'golden') {
+    return (
+      <GoldenGreeting
+        receiverName={props.receiverName}
+        senderName={props.senderName}
+        message={props.message}
+      />
+    );
+  }
   
-  // Render standard greeting for other themes (golden)
+  // Render standard greeting for other themes (fallback)
   return <StandardGreeting {...props} />;
 }

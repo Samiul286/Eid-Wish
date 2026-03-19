@@ -141,7 +141,7 @@ export default function LandingPage() {
               >
                 ✦
               </motion.span>
-              <span className="text-white/20 text-xs">Made with ❤️ for the Muslim Ummah</span>
+              <span className="text-white/20 text-xs">Made with ❤️ Sami</span>
               <motion.span
                 animate={{ scale: [1, 1.3, 1] }}
                 transition={{ duration: 2.5, repeat: Infinity, delay: 1 }}

@@ -6,7 +6,7 @@ import { Eye, Music, Music2, Home, Heart, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_MESSAGE, incrementViewCount, generateWishId } from '@/types/wish';
 import LoveTheme from './ThemeBackgrounds/LoveTheme';
-import ShareButtons from './ShareButtons';
+
 import Link from 'next/link';
 
 interface LoveGreetingProps {
@@ -329,7 +329,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
       <AnimatePresence>
         {showContent && (
           <motion.div
-            className="min-h-screen flex items-center justify-center px-4 py-16"
+            className="min-h-screen flex items-start justify-center px-3 sm:px-4 pt-16 pb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -378,9 +378,9 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                     }}
                   />
 
-                  <div className="relative p-8 md:p-12">
+                  <div className="relative p-5 sm:p-8 md:p-10">
                     {/* Greeting Header */}
-                    <div className="text-center mb-8">
+                    <div className="text-center mb-5 sm:mb-8">
                       <GlowingText delay={0.3}>
                         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-rose-100 text-rose-600 text-sm font-medium mb-4">
                           <Sparkles className="w-4 h-4" />
@@ -394,13 +394,13 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.5, type: 'spring' }}
                       >
-                        <h1 className="text-3xl md:text-5xl font-serif font-bold mb-2">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-2">
                           <span className="bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent">
                             Dear
                           </span>
                         </h1>
                         <motion.div
-                          className="mt-2 text-4xl md:text-6xl font-bold bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent"
+                          className="mt-2 text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.8, duration: 0.8 }}
@@ -412,7 +412,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
 
                     {/* Decorative divider */}
                     <motion.div
-                      className="flex items-center justify-center gap-4 my-6"
+                      className="flex items-center justify-center gap-4 my-4 sm:my-6"
                       initial={{ opacity: 0, scaleX: 0 }}
                       animate={{ opacity: 1, scaleX: 1 }}
                       transition={{ delay: 1.2 }}
@@ -424,21 +424,21 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
 
                     {/* Message */}
                     <motion.div
-                      className="relative mb-8"
+                      className="relative mb-5 sm:mb-8"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.4 }}
                     >
-                      <div className="absolute -left-2 top-0 text-6xl text-rose-200 font-serif">"</div>
-                      <p className="text-lg md:text-xl text-gray-700 leading-relaxed text-center px-6 italic font-serif">
+                      <div className="absolute -left-2 top-0 text-5xl sm:text-6xl text-rose-200 font-serif">&ldquo;</div>
+                      <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed text-center px-4 sm:px-6 italic font-serif">
                         {message || DEFAULT_MESSAGE}
                       </p>
-                      <div className="absolute -right-2 bottom-0 text-6xl text-rose-200 font-serif">"</div>
+                      <div className="absolute -right-2 bottom-0 text-5xl sm:text-6xl text-rose-200 font-serif">&rdquo;</div>
                     </motion.div>
 
                     {/* Decorative divider */}
                     <motion.div
-                      className="flex items-center justify-center gap-4 my-6"
+                      className="flex items-center justify-center gap-4 my-4 sm:my-6"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1.6 }}
@@ -458,7 +458,7 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
                       transition={{ delay: 1.8 }}
                     >
                       <p className="text-gray-500 text-sm mb-2">With all my love,</p>
-                      <p className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
+                      <p className="text-xl sm:text-2xl md:text-3xl font-semibold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
                         {senderName}
                       </p>
                       <motion.div
@@ -487,14 +487,15 @@ export default function LoveGreeting({ receiverName, senderName, message }: Love
 
                     {/* View counter */}
                     <motion.div
-                      className="flex items-center justify-center gap-2 text-gray-400 mt-8"
+                      className="flex items-center justify-center gap-2 text-gray-400 mt-5 sm:mt-8"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 2.2 }}
                     >
                       <Eye className="w-4 h-4" />
-                      <span className="text-sm">{viewCount} people viewed this love letter</span>
+                      <span className="text-xs sm:text-sm">{viewCount} people viewed this love letter</span>
                     </motion.div>
+
                   </div>
                 </div>
 
